@@ -7,6 +7,7 @@ const sqlQuery = ref('SELECT * FROM test_table')
 const queryResult = ref<any[]>([])
 const queryError = ref<string | null>(null)
 
+//test
 // テスト用に事前定義されたサンプルクエリ
 const exampleQueries = [
   { title: 'Select all', query: 'SELECT * FROM test_table' },
