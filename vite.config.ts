@@ -24,4 +24,5 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@sqlite.org/sqlite-wasm'],
   },
+  base: '/todo002/',
 })
