@@ -10,26 +10,45 @@ const showDetail: Ref<boolean> = ref(false);
 const openDetail = () => {
     showDetail.value = !showDetail.value;
 }
+const getTodoByCategory = (date: string, idCategory: string): {id: string, 
+                                              createAt: Date,
+                                              doAt: Date, 
+                                              title: string, 
+                                              detail: string}[] => {
+    const dic = todoStore.calenderTodo[date]
+    if(dic == null){
+        return [];
+    }else{
+        const arr = dic[idCategory];
+        if(arr == null || arr.length == 0){
+            //return [{id: "0" ,title: "none", createAt: new Date(), doAt: new Date(), detail: ""}];
+            return [];
+        }else{
+            return arr;
+        }
+    }
+}
+
 </script>
 
 <template>
     <div class="base">
         <div>test list</div>
-        <div class="container" v-on:click="openDetail">
-            <div v-for="item in todoStore.$state.listCategory" class="category">
-                <div>{{ item.name }}</div>
-                <div v-for="content in todoStore.$state.currentTodo[item.id]" class="container">
-                    <div>
-                        <div class="item">{{ (content.doAt.getMonth() + 1) + "/" + content.doAt.getDate()}}</div>
-                    </div>
-                    <div>
-                        <div>{{ content.title }}</div>
-                        <div v-show="showDetail">{{ content.detail }}</div>
+        <div class="category2 container">
+            <div class="container">{{ "" }}</div>
+            <div v-for="category in todoStore.listCategory" class="container">
+                <div>{{ category.name}}</div>
+            </div>            
+        </div>
+
+            <div v-for="date in todoStore.dateSpan" class="category2 container">
+                <div class="container">{{ date }}</div>
+                <div v-for="category in todoStore.listCategory" class="category2">
+                    <div v-for="item in getTodoByCategory(date, category.id)" >
+                        <div>{{ item.title}}</div>
                     </div>
                 </div>
             </div>                 
-        </div>
-   
     </div>
 
 </template>
@@ -40,10 +59,15 @@ const openDetail = () => {
 }
 .container {
     display: flex;
+    width: 100%;
+    border: 1px solid;
 }
 .category {
     background-color: azure;
     width: calc(100% / v-bind(todoStore.listCategory.length));
+}
+.category2 {
+    width: 100%;
 }
 .item {
     margin: 0 4px 0 4px;

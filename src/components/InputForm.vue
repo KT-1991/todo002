@@ -11,6 +11,10 @@ const openDetail = () => {
     showDetail.value = !showDetail.value;
 }
 
+const addTodo = () => {
+    todoStore.addTodo();
+}
+
 </script>
 
 <template>
@@ -32,7 +36,7 @@ const openDetail = () => {
             <br>
             <input type="date" placeholder="date">
             <br>
-            <button>add</button>             
+            <button v-on:click="addTodo">add</button>             
         </div>
        
     </div>
