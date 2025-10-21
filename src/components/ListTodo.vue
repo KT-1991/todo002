@@ -14,8 +14,11 @@ const openDetail = () => {
 
 <template>
     <div class="base">
-        <div>test list</div>
-        <div class="container" v-on:click="openDetail">
+        <div>
+            <span>list</span>
+            <button v-on:click="openDetail">detail</button>
+        </div>
+        <div class="container">
             <div v-for="item in todoStore.$state.listCategory" class="category">
                 <div>{{ item.name }}</div>
                 <div v-for="content in todoStore.$state.currentTodo[item.id]" class="container">
@@ -44,6 +47,7 @@ const openDetail = () => {
 }
 .container {
     display: flex;
+    width: 100%;
 }
 .category {
     background-color: azure;

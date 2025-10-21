@@ -226,7 +226,8 @@ export const useTodoStore = defineStore("todo", {
                             WHERE 
                               title LIKE '%` + word + `%' 
                             ORDER BY
-                              tt.id DESC`
+                              tt.id DESC
+                            LIMIT 10`
       const result = await executeQuery(sql);
       this.suggestions = [];
       for(let i=0; i < result.result.resultRows?.length!; i++){

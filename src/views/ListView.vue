@@ -4,12 +4,19 @@ import InputForm from '@/components/InputForm.vue';
 </script>
 
 <template>
-  <main>
+  <main class="base">
     <ListTodo />
     <InputForm/>
   </main>
 </template>
 
-<style>
+<style scoped>
+
+@media (min-width: 1024px) {
+  .base {
+    display: flex;
+    width: 100%;
+  }
+}
 
 </style>
