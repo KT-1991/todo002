@@ -36,7 +36,7 @@ const openDetail = () => {
                 </div>
             </div>                 
         </div>
-   
+        <div v-for="value in 100"> {{ value }}</div>
     </div>
 
 </template>
@@ -44,6 +44,7 @@ const openDetail = () => {
 <style scoped> 
 .base {
     background-color: antiquewhite;
+    height: 100%;
 }
 .container {
     display: flex;

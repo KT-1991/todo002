@@ -25,8 +25,9 @@ const getSuggestion = (word: string) => {
 </script>
 
 <template>
+    
     <div class="base">
-        <div v-on:click="openDetail">add</div>
+        <div v-on:click="openDetail" class="title">add</div> 
         <div v-show="showDetail">
             <select v-model="selectedCategory">
                 <option disabled value="" >カテゴリー</option>
@@ -47,8 +48,7 @@ const getSuggestion = (word: string) => {
             <input type="date" placeholder="date" v-model="doAt">
             <br>
             <button v-on:click="addTodo">add</button>             
-        </div>
-       
+        </div>            
     </div>
 
 </template>
@@ -56,5 +56,10 @@ const getSuggestion = (word: string) => {
 <style scoped>
 .base {
     background-color: lightblue;
+    width: 100%;
 }
+.title {
+    background-color:aqua;
+}
+
 </style>
