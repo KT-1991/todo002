@@ -20,6 +20,7 @@ export const useTodoStore = defineStore("todo", {
                                                 completedAt: Date, 
                                                 title: string, 
                                                 detail: string}[]},
+    suggestions: [] as string[]
   }),
   getters: {
     dateSpan(): string[] {
@@ -216,6 +217,21 @@ export const useTodoStore = defineStore("todo", {
                           VALUES (` + id.toString() + `)`;
       await executeQuery(sql);
       await this.initTodo();
+    },
+    async makeSuggestions(word: string) {
+      const sql: string = `SELECT 
+                              DISTINCT title 
+                            FROM 
+                              tr_todo tt
+                            WHERE 
+                              title LIKE '%` + word + `%' 
+                            ORDER BY
+                              tt.id DESC`
+      const result = await executeQuery(sql);
+      this.suggestions = [];
+      for(let i=0; i < result.result.resultRows?.length!; i++){
+        this.suggestions.push(result.result.resultRows![i]![0] as string);
+      }
     }
   },
 });  

@@ -18,6 +18,10 @@ const addTodo = () => {
     todoStore.addTodo(selectedCategory.value as unknown as number, title.value, detail.value, doAt.value);
 }
 
+const getSuggestion = (word: string) => {
+    title.value = word;
+}
+
 </script>
 
 <template>
@@ -33,8 +37,11 @@ const addTodo = () => {
                 </option>
             </select>
             <br>
-            <input type="text" placeholder="title" v-model="title">
+            <input type="text" placeholder="title" v-model="title" v-on:keyup="todoStore.makeSuggestions(title)">
             <br>
+            <div v-for="value in todoStore.suggestions">
+                <button v-on:click="getSuggestion(value)">{{ value }}</button>
+            </div>
             <input type="text" placeholder="detail" v-model="detail">
             <br>
             <input type="date" placeholder="date" v-model="doAt">
