@@ -10,7 +10,7 @@ const showDetail: Ref<boolean> = ref(false);
 const openDetail = () => {
     showDetail.value = !showDetail.value;
 }
-const getTodoByCategory = (date: string, idCategory: string): {id: string, 
+const getTodoByCategory = (date: string, idCategory: number): {id: number, 
                                               createAt: Date,
                                               doAt: Date, 
                                               title: string, 
@@ -45,7 +45,10 @@ const getTodoByCategory = (date: string, idCategory: string): {id: string,
                 <div class="container">{{ date }}</div>
                 <div v-for="category in todoStore.listCategory" class="category2">
                     <div v-for="item in getTodoByCategory(date, category.id)" >
-                        <div>{{ item.title}}</div>
+                        <div>
+                            <span>{{ item.title}}</span>
+                            <button v-on:click="todoStore.deleteTodo(item.id)">delete</button>
+                        </div>
                     </div>
                 </div>
             </div>                 

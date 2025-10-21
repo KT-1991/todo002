@@ -20,10 +20,14 @@ const openDetail = () => {
                 <div>{{ item.name }}</div>
                 <div v-for="content in todoStore.$state.currentTodo[item.id]" class="container">
                     <div>
-                        <div class="item">{{ (content.doAt.getMonth() + 1) + "/" + content.doAt.getDate()}}</div>
+                        <span class="item">{{ (content.doAt.getMonth() + 1) + "/" + content.doAt.getDate()}}</span>
+                        
                     </div>
                     <div>
-                        <div>{{ content.title }}</div>
+                        <div>
+                            <span>{{ content.title }}</span>
+                            <button v-on:click="todoStore.deleteTodo(content.id)">delete</button>
+                        </div>
                         <div v-show="showDetail">{{ content.detail }}</div>
                     </div>
                 </div>

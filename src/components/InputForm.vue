@@ -11,8 +11,11 @@ const openDetail = () => {
     showDetail.value = !showDetail.value;
 }
 
+const title: Ref<string> = ref("");
+const detail: Ref<string> = ref("");
+const doAt: Ref<Date> = ref(new Date());
 const addTodo = () => {
-    todoStore.addTodo();
+    todoStore.addTodo(selectedCategory.value as unknown as number, title.value, detail.value, doAt.value);
 }
 
 </script>
@@ -22,7 +25,7 @@ const addTodo = () => {
         <div v-on:click="openDetail">add</div>
         <div v-show="showDetail">
             <select v-model="selectedCategory">
-                <option disabled value="">カテゴリー</option>
+                <option disabled value="" >カテゴリー</option>
                 <option v-for="item in todoStore.listCategory" 
                     v-bind:value="item.id" 
                     v-bind:key="item.id">
@@ -30,11 +33,11 @@ const addTodo = () => {
                 </option>
             </select>
             <br>
-            <input type="text" placeholder="title">
+            <input type="text" placeholder="title" v-model="title">
             <br>
-            <input type="text" placeholder="detail">
+            <input type="text" placeholder="detail" v-model="detail">
             <br>
-            <input type="date" placeholder="date">
+            <input type="date" placeholder="date" v-model="doAt">
             <br>
             <button v-on:click="addTodo">add</button>             
         </div>

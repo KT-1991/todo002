@@ -8,6 +8,38 @@ const databaseConfig = {
     test: {
       name: 'test_table',
       schema: `
+        CREATE TABLE IF NOT EXISTS ms_category (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE TABLE IF NOT EXISTS tr_todo (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id_category INTEGER,
+          title TEXT NOT NULL,
+          detail TEXT,
+          do_at TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE TABLE IF NOT EXISTS d_ms_category (
+          id INTEGER PRIMARY KEY,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE TABLE IF NOT EXISTS d_tr_todo (
+          id INTEGER PRIMARY KEY,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `,
+    },
+  },
+} as const
+
+const _databaseConfig = {
+  filename: 'file:mydb.sqlite3?vfs=opfs',
+  tables: {
+    test: {
+      name: 'test_table',
+      schema: `
         CREATE TABLE IF NOT EXISTS test_table (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
