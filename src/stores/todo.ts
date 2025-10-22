@@ -2,7 +2,7 @@
 import { defineStore } from "pinia";
 import { SQL_TEXT, TABLE_INFO } from "@/scripts/const";
 import { useSQLite } from "@/scripts/sqlite";
-const { isLoading, error, executeQuery } = useSQLite()
+const { isLoading, error, executeQuery, exportDB, importDB } = useSQLite()
 
 // カウンターストアを定義
 export const useTodoStore = defineStore("todo", {
@@ -233,6 +233,12 @@ export const useTodoStore = defineStore("todo", {
       for(let i=0; i < result.result.resultRows?.length!; i++){
         this.suggestions.push(result.result.resultRows![i]![0] as string);
       }
+    },
+    export(){
+      exportDB();
+    },
+    import(){
+      importDB();
     }
   },
 });  
