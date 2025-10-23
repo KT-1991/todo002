@@ -21,22 +21,33 @@ const openDetail = () => {
         <div class="container">
             <div v-for="item in todoStore.$state.listCategory" class="category">
                 <div>{{ item.name }}</div>
-                <div v-for="content in todoStore.$state.currentTodo[item.id]" class="container">
-                    <div>
-                        <span class="item">{{ (content.doAt.getMonth() + 1) + "/" + content.doAt.getDate()}}</span>
-                        
-                    </div>
-                    <div>
-                        <div>
-                            <span>{{ content.title }}</span>
-                            <button v-on:click="todoStore.deleteTodo(content.id)">delete</button>
-                        </div>
-                        <div v-show="showDetail">{{ content.detail }}</div>
-                    </div>
-                </div>
+                <table>
+                    <thead class="tableHeader">
+                        <tr>
+                            <th>
+                                <button v-on:click="todoStore.sortByDate(item.id)">date</button>
+                            </th>
+                            <th>
+                                <button v-on:click="todoStore.sortByTitle(item.id)">title</button>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="content in todoStore.$state.currentTodo[item.id]">
+                            <td>{{ (content.doAt.getMonth() + 1) + "/" + content.doAt.getDate()}}</td>
+                            <td>
+                                <div>{{ content.title }}</div>
+                                <div v-show="showDetail">{{ content.detail }}</div>
+                            </td>
+                            <td>
+                                <button v-on:click="todoStore.deleteTodo(content.id)">✔️</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>                 
         </div>
-        <div v-for="value in 100"> {{ value }}</div>
     </div>
 
 </template>
@@ -56,5 +67,8 @@ const openDetail = () => {
 }
 .item {
     margin: 0 4px 0 4px;
+}
+.tableHeader {
+    position: sticky;
 }
 </style>

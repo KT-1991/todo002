@@ -5,8 +5,8 @@ import InputForm from '@/components/InputForm.vue';
 
 <template>
   <main class="base">
+    <InputForm class="header"/>
     <ListTodo />
-    <InputForm class="footer"/>
   </main>
 </template>
 
@@ -16,6 +16,11 @@ import InputForm from '@/components/InputForm.vue';
   width: 100%;
   position: sticky;
   bottom: 0;
+}
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
 }
 
 @media (min-width: 1024px) {

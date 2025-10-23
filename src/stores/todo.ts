@@ -20,7 +20,9 @@ export const useTodoStore = defineStore("todo", {
                                                 completedAt: Date, 
                                                 title: string, 
                                                 detail: string}[]},
-    suggestions: [] as string[]
+    suggestions: [] as string[],
+    isSortedByDateAsc: true as Boolean,
+    isSortedByTitleAsc: true as Boolean,
   }),
   getters: {
     dateSpan(): string[] {
@@ -87,7 +89,6 @@ export const useTodoStore = defineStore("todo", {
         }
       });
     }
-    console.log(calendarTodo);
     return calendarTodo;
   }
   },
@@ -96,13 +97,7 @@ export const useTodoStore = defineStore("todo", {
     
     async init() {
       await this.initListCategory();
-
       await this.initTodo();
-      //this.currentTodo[1]!.push({id: 0, createAt: new Date("2025-10-01"), doAt: new Date("2025-10-01"), title: "test1", detail: "test1-1"});
-      //this.currentTodo[1]!.push({id: 1, createAt: new Date("2025-10-02"), doAt: new Date("2025-10-02"), title: "test2", detail: "test2-1"});
-      //this.currentTodo[1]!.push({id: 2, createAt: new Date("2025-10-03"), doAt: new Date("2025-10-03"), title: "test3", detail: "test3-1"});
-      //this.currentTodo[2]!.push({id: 3, createAt: new Date("2025-10-04"), doAt: new Date("2025-10-04"), title: "test4", detail: "test4-1"});
-      //this.currentTodo[2]!.push({id: 4, createAt: new Date("2025-10-05"), doAt: new Date("2025-10-05"), title: "test5", detail: "test5-1"});
     },
 
     async getColumnInfo(tableName: string): Promise<{[colName: string]: number}> {
@@ -124,7 +119,6 @@ export const useTodoStore = defineStore("todo", {
         }
         result = await executeQuery(SQL_TEXT.SELECT_CATEGORY);
       }
-      console.log(result);
       
       this.listCategory = [];
       for(let i=0; i < result?.result.resultRows!.length; i++){
@@ -158,7 +152,6 @@ export const useTodoStore = defineStore("todo", {
         await executeQuery("INSERT INTO tr_todo (id_category, title, detail, do_at) VALUES (1, 'test01', 'test01-01', '2025-10-01')");
         result = await executeQuery("SELECT * FROM tr_todo");
       }
-      console.log(result);
       const colNameId: {[key: string]: number} = {};
       colNameId["id"] = 0;
       colNameId["id_category"] = 1;
@@ -176,7 +169,7 @@ export const useTodoStore = defineStore("todo", {
         const do_at: Date = new Date(elem[colNameId["do_at"]!] as string) as Date;
         const created_at: Date = new Date(elem[colNameId["created_at"]!] as string) as Date;
         const deleted_at = elem[colNameId["deleted_at"]!];
-        console.log(deleted_at);
+
         if(deleted_at != null){
           this.completedTodo[id_category]!.push({id: id, 
                                                   createAt: created_at, 
@@ -185,7 +178,9 @@ export const useTodoStore = defineStore("todo", {
                                                   doAt: do_at,
                                                   completedAt: new Date(deleted_at as string)});
         }else{
-          this.currentTodo[id_category]!.push({id: id, createAt: created_at, title: title, detail: detail, doAt: do_at});
+          if(this.currentTodo[id_category] != null){
+            this.currentTodo[id_category]!.push({id: id, createAt: created_at, title: title, detail: detail, doAt: do_at});
+          }
         }
         
       });
@@ -239,6 +234,62 @@ export const useTodoStore = defineStore("todo", {
     },
     import(){
       importDB();
+    },
+    sortByDate(categoryId: number){
+      this.isSortedByDateAsc = !this.isSortedByDateAsc
+      this.currentTodo[categoryId]?.sort((a, b): number => {
+        const sign: number = this.compareTime(a.doAt, b.doAt);
+        if(sign == 0){
+          return this.compareTitle(a.title, b.title);
+        }else{
+          return sign;
+        }
+      })
+    },
+    sortByTitle(categoryId: number){
+      this.isSortedByTitleAsc = !this.isSortedByTitleAsc;
+      this.currentTodo[categoryId]?.sort((a, b): number => {
+        const sign: number = this.compareTitle(a.title, b.title);
+        if(sign == 0){
+          return this.compareTime(a.doAt, b.doAt);
+        }else{
+          return sign;
+        }
+      })
+    },
+    compareTime(a: Date, b: Date): number{
+      let sign: number;
+
+      if(this.isSortedByDateAsc){
+        sign = 1;
+      }else{
+        sign = -1;
+      }
+      if(a.getTime() > b.getTime()){
+        return sign;
+      }else if(a.getTime() == b.getTime()){
+        return 0;
+      } else{
+        return -sign;
+      }
+    },
+    compareTitle(a: string, b: string): number{
+      let sign: number;
+
+      if(this.isSortedByTitleAsc){
+        sign = 1;
+      }else{
+        sign = -1;
+      }
+
+      if(a > b){
+        return sign;
+      }else if(a == b){
+        return 0;
+      } else{
+        return -sign;
+      }
     }
   },
+
 });  

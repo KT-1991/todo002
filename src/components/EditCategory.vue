@@ -3,24 +3,36 @@ import { useTodoStore } from '@/stores/todo';
 import { ref, type Ref } from 'vue';
 
 const todoStore = useTodoStore();
+todoStore.init();
 
 const newName: Ref<string> = ref("");
 
 const addCategory = () => {
     todoStore.addCategory(newName.value);
 }
+const deleteCategory = (id: number) => {
+    todoStore.deleteCategory(id);
+    todoStore.initListCategory();
+}
 
 </script>
 
 <template>
     <div class="base">
-        <div v-for="item in todoStore.listCategory">
-            <span>{{ item.name }}</span>
-            <span>[非表示]</span>
-            <span>[削除]</span>
+        <table>
+            <tr v-for="item in todoStore.listCategory">
+                <td>{{ item.name }}</td>
+                <td>[非表示]</td>
+                <td>
+                    <button v-on:click="deleteCategory(item.id)">delete</button>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="text" placeholder="new category" v-model="newName">
+            <button v-on:click="addCategory">add</button>
         </div>
-       <input type="text" placeholder="new category" v-model="newName">
-       <button v-on:click="addCategory">add</button>
+       
     </div>
 
 </template>
