@@ -4,22 +4,28 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-      <RouterLink to="/test">Test</RouterLink>
-      <RouterLink to="/list">List</RouterLink>
-      <RouterLink to="/calendar">Calendar</RouterLink>
-      <RouterLink to="/category">Category</RouterLink>
-      <RouterLink to="/log">Log</RouterLink>
-    </nav>
-  </header>
-  <br>
-  <RouterView />
+  <div class="base">
+    <header>
+      <nav>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/test">Test</RouterLink>
+        <RouterLink to="/list">List</RouterLink>
+        <RouterLink to="/calendar">Calendar</RouterLink>
+        <RouterLink to="/category">Category</RouterLink>
+        <RouterLink to="/log">Log</RouterLink>
+      </nav>
+    </header>
+    <br>
+    <RouterView />    
+  </div>
+
 </template>
 
 <style scoped>
+.base {
+  height: 100%;
+}
 header {
   line-height: 1.5;
   max-height: 100vh;

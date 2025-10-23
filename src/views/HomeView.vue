@@ -7,3 +7,11 @@ import TheWelcome from '../components/TheWelcome.vue'
     <TheWelcome />
   </main>
 </template>
+
+<style scoped>
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+}
+</style>

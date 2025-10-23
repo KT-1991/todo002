@@ -59,6 +59,8 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
 <style scoped> 
 .base {
     background-color: antiquewhite;
+    max-height: 100%;
+    overflow-y: scroll;
 }
 .container {
     display: flex;

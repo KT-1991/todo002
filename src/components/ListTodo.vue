@@ -55,7 +55,8 @@ const openDetail = () => {
 <style scoped> 
 .base {
     background-color: antiquewhite;
-    height: 100%;
+    max-height: 100%;
+    overflow-y: scroll;
 }
 .container {
     display: flex;

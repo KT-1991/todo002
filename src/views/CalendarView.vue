@@ -4,12 +4,14 @@ import InputForm from '@/components/InputForm.vue';
 </script>
 
 <template>
-  <main>
-    <CalendarTodo/>
+  <main class="base">
     <InputForm/>
+    <CalendarTodo/>
   </main>
 </template>
 
-<style>
-
+<style scoped>
+.base {
+  height: 100%;
+}
 </style>
