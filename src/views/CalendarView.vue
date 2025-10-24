@@ -12,6 +12,6 @@ import InputForm from '@/components/InputForm.vue';
 
 <style scoped>
 .base {
-  height: 100%;
+  max-height: 100%;
 }
 </style>

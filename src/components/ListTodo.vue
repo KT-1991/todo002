@@ -10,43 +10,128 @@ const showDetail: Ref<boolean> = ref(false);
 const openDetail = () => {
     showDetail.value = !showDetail.value;
 }
+const getMax = (): number => {
+    let max = 0;
+    todoStore.listCategory.forEach(elem => {
+        const listTodo = todoStore.currentTodo[elem.id]
+        if(listTodo != null){
+            const len:number = listTodo.length;
+            if(max < len){
+                max = len;
+            }            
+        }
+
+    })
+    return max;
+}
+const EMPTY: string = "　"
+const getContent = (index: number, categoryId: number, itemName: string) => {
+    if(index > getMax()){
+        return EMPTY;
+    }
+    const content = todoStore.currentTodo[categoryId]![index-1];
+    if(content == null){
+        return EMPTY;
+    }
+    switch(itemName){
+        case "date":
+            const doAt = content?.doAt;
+            if(doAt == null){
+                return EMPTY;
+            } else{
+                return (doAt.getMonth() + 1) + "/" + doAt.getDate();
+            }
+        case "title":
+            return content!.title;
+        case "detail": 
+            return content!.detail;
+        case "delete":
+            return content!.id.toString();
+    }   
+}
+const getBackgroundColorClass = (categoryId: number, isHeader: boolean) => {
+    for(let i=0; i < todoStore.listCategory.length; i++){
+        if(todoStore.listCategory[i]!.id == categoryId){
+            if(i % 2 == 0){
+                if(isHeader){
+                    return "light_head";
+                }else{
+                    return "light_body";
+                }
+            }else{
+                if(isHeader){
+                    return "heavy_head";
+                }else{
+                    return "heavy_body";
+                }
+            }
+        }
+    }
+    return "testheavy_head";
+}
+const isLastRowClass = (categoryId: number, row: number) => {
+    if(row >= todoStore.currentTodo[categoryId]!.length){
+        return false;
+    }
+    const prev = todoStore.currentTodo[categoryId]![row - 1]?.doAt;
+    const next = todoStore.currentTodo[categoryId]![row]?.doAt;
+    if(prev?.getDate() == next?.getDate()){
+        return false;
+    }else{
+        return true;
+    }
+}
+const isHolidayClass = (index: number, categoryId: number) => {
+    if(index > getMax()){
+        return "";
+    }
+    const content = todoStore.currentTodo[categoryId]![index-1];
+    switch(content?.doAt.getDay()){
+        case 0: return "sunday";
+        case 6: return "saturday";
+        default: return "";
+    }
+}
+
 </script>
 
 <template>
     <div class="base">
-        <div>
-            <span>list</span>
-            <button v-on:click="openDetail">detail</button>
-        </div>
         <div class="container">
-            <div v-for="item in todoStore.$state.listCategory" class="category">
-                <div>{{ item.name }}</div>
-                <table>
-                    <thead class="tableHeader">
-                        <tr>
-                            <th>
-                                <button v-on:click="todoStore.sortByDate(item.id)">date</button>
-                            </th>
-                            <th>
-                                <button v-on:click="todoStore.sortByTitle(item.id)">title</button>
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="content in todoStore.$state.currentTodo[item.id]">
-                            <td>{{ (content.doAt.getMonth() + 1) + "/" + content.doAt.getDate()}}</td>
+            <table class="sticky_table" v-for="category in todoStore.listCategory" >
+                <thead class="test" v-bind:class="getBackgroundColorClass(category.id, true)">
+                    <tr> 
+                        <th colspan="3">
+                            {{ category.name }}
+                        </th>
+                    </tr>
+                    <tr >
+                        <th class="header">
+                            <button v-on:click="todoStore.sortByDate(category.id)">date</button>
+                        </th>
+                        <th>
+                            <button v-on:click="todoStore.sortByTitle(category.id)">title</button>
+                        </th>  
+                        <th></th>                          
+                    </tr>         
+
+                </thead>
+                <tbody>
+                    <tr v-for="i in getMax()" v-bind:class="getBackgroundColorClass(category.id, false)"
+                        :class="{test: isLastRowClass(category.id, i)}">
+                            <td v-bind:class="isHolidayClass(i, category.id)">{{ getContent(i, category.id, "date") }}</td>
                             <td>
-                                <div>{{ content.title }}</div>
-                                <div v-show="showDetail">{{ content.detail }}</div>
+                                <div v-on:click="openDetail">{{getContent(i, category.id, "title")  }}</div>
+                                <div v-show="showDetail">{{ getContent(i, category.id, "detail") }}</div>
                             </td>
                             <td>
-                                <button v-on:click="todoStore.deleteTodo(content.id)">✔️</button>
+                                <button v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
+                                        v-if="getContent(i, category.id, 'delete') != EMPTY">✔️</button>
                             </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>                 
+
+                    </tr>
+                </tbody>
+            </table>                 
         </div>
     </div>
 
@@ -55,21 +140,57 @@ const openDetail = () => {
 <style scoped> 
 .base {
     background-color: antiquewhite;
-    max-height: 100%;
-    overflow-y: scroll;
+    height: 100%;
 }
 .container {
     display: flex;
-    width: 100%;
+    flex-direction: row;
+    overflow-y: scroll;
+    max-height: 100%;
+    min-width: 100%;
 }
 .category {
     background-color: azure;
     width: calc(100% / v-bind(todoStore.listCategory.length));
 }
+.header{
+    position: sticky;
+    top: 0;
+}
 .item {
     margin: 0 4px 0 4px;
 }
-.tableHeader {
-    position: sticky;
+.sticky_table{
+    border-collapse: collapse;
+    width: 100%;
+    thead{
+        /* 縦スクロール時に固定する */
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        /* tbody内のセルより手前に表示する */
+        z-index: 1;
+    }
+}
+.light_head {
+    background-color: lightblue;
+}
+.heavy_head {
+    background-color: lightcyan;
+}
+.light_body {
+    background-color: palegoldenrod;
+}
+.heavy_body {
+    background-color: lightgoldenrodyellow;
+}
+.test {
+    border-bottom: 1px solid;
+}
+.saturday {
+    color: blue;
+}
+.sunday {
+    color: red;
 }
 </style>

@@ -57,8 +57,6 @@ const getSuggestion = (word: string) => {
 .base {
     background-color: lightblue;
     width: 100%;
-    position: sticky;
-    top: 0;
 }
 .title {
     background-color:aqua;

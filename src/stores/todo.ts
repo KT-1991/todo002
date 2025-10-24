@@ -146,7 +146,9 @@ export const useTodoStore = defineStore("todo", {
                                     tr_todo tt
                                   LEFT JOIN 
                                     d_tr_todo dt
-                                  ON tt.id = dt.id`
+                                  ON tt.id = dt.id
+                                  ORDER BY
+                                    do_at ASC`
       let result = await executeQuery(sqlSelect);
       if(result.result.resultRows?.length == 0){
         await executeQuery("INSERT INTO tr_todo (id_category, title, detail, do_at) VALUES (1, 'test01', 'test01-01', '2025-10-01')");
