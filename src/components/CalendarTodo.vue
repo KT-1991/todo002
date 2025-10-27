@@ -46,7 +46,7 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
                     <td v-for="category in todoStore.listCategory">
                         <div v-for="item in getTodoByCategory(date, category.id)" >
                             <span class="item">{{ item.title}}</span>
-                            <button v-on:click="todoStore.deleteTodo(item.id)">delete</button>
+                            <button v-on:click="todoStore.deleteTodo(item.id)">complete !</button>
                         </div>
                     </td>
                 </tr>
@@ -58,7 +58,8 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
 <style scoped> 
 .base_calendar_todo {
     background-color: antiquewhite;
-    max-height: 100%;
+    height: 90vh;
+    margin: 0 0 0 10px;
     overflow-y: scroll;
 }
 .calendar_table {

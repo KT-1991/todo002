@@ -18,27 +18,40 @@ const deleteCategory = (id: number) => {
 </script>
 
 <template>
-    <div class="base">
-        <table>
-            <tr v-for="item in todoStore.listCategory">
-                <td>{{ item.name }}</td>
-                <td>[非表示]</td>
-                <td>
-                    <button v-on:click="deleteCategory(item.id)">delete</button>
-                </td>
-            </tr>
-        </table>
-        <div>
+    <div class="base_edit_category">
+        <div class="title_category">
             <input type="text" placeholder="new category" v-model="newName">
             <button v-on:click="addCategory">add</button>
+        </div> 
+        <div class="table_category">
+            <div>category list</div>       
+            <table>
+                <tr v-for="item in todoStore.listCategory">
+                    <td>{{ item.name }}</td>
+                    <td>[非表示]</td>
+                    <td>
+                        <button v-on:click="deleteCategory(item.id)">delete</button>
+                    </td>
+                </tr>
+            </table>            
         </div>
-       
     </div>
 
 </template>
 
 <style scoped>
-.base {
-    background-color: lightblue;
+.base_edit_category {
+    margin: 10px;
+}
+.title_category {
+    background-color: lightskyblue;
+    padding: 5px;
+    margin: 0 0 10px 0;
+    border: 1px solid;
+}
+.table_category {
+    background-color: lightcyan;
+    border: 1px solid;
+    padding: 5px;
 }
 </style>

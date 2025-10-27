@@ -36,6 +36,6 @@ import HelloWorld from './components/HelloWorld.vue'
 }
 .background {
   height: 100vh;
-  background-color: lightgrey;
+  background-color: whitesmoke;
 }
 </style>

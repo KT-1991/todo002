@@ -107,10 +107,10 @@ const isHolidayClass = (index: number, categoryId: number) => {
                     </tr>
                     <tr >
                         <th class="header">
-                            <button v-on:click="todoStore.sortByDate(category.id)">date</button>
+                            <button v-on:click="todoStore.sortByDate(category.id)">sort: date</button>
                         </th>
                         <th>
-                            <button v-on:click="todoStore.sortByTitle(category.id)">title</button>
+                            <button v-on:click="todoStore.sortByTitle(category.id)">sort: title</button>
                         </th>  
                         <th></th>                          
                     </tr>         
@@ -126,7 +126,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
                             </td>
                             <td>
                                 <button v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
-                                        v-if="getContent(i, category.id, 'delete') != EMPTY">✔️</button>
+                                        v-if="getContent(i, category.id, 'delete') != EMPTY">complete !</button>
                             </td>
 
                     </tr>
@@ -142,6 +142,8 @@ const isHolidayClass = (index: number, categoryId: number) => {
     background-color: antiquewhite;
     overflow-y: scroll;
     height: 90vh;
+    ç
+    border: 1px solid;
 }
 .container {
     display: flex;
