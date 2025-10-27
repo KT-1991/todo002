@@ -96,10 +96,10 @@ const isHolidayClass = (index: number, categoryId: number) => {
 </script>
 
 <template>
-    <div class="base">
+    <div class="base_list_todo">
         <div class="container">
             <table class="sticky_table" v-for="category in todoStore.listCategory" >
-                <thead class="test" v-bind:class="getBackgroundColorClass(category.id, true)">
+                <thead class="border" v-bind:class="getBackgroundColorClass(category.id, true)">
                     <tr> 
                         <th colspan="3">
                             {{ category.name }}
@@ -118,7 +118,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
                 </thead>
                 <tbody>
                     <tr v-for="i in getMax()" v-bind:class="getBackgroundColorClass(category.id, false)"
-                        :class="{test: isLastRowClass(category.id, i)}">
+                        :class="{border: isLastRowClass(category.id, i)}">
                             <td v-bind:class="isHolidayClass(i, category.id)">{{ getContent(i, category.id, "date") }}</td>
                             <td>
                                 <div v-on:click="openDetail">{{getContent(i, category.id, "title")  }}</div>
@@ -138,16 +138,18 @@ const isHolidayClass = (index: number, categoryId: number) => {
 </template>
 
 <style scoped> 
-.base {
+.base_list_todo {
     background-color: antiquewhite;
-    height: 100%;
+    overflow-y: scroll;
+    height: 90vh;
 }
 .container {
     display: flex;
     flex-direction: row;
     overflow-y: scroll;
-    max-height: 100%;
     min-width: 100%;
+    height: 90vh;
+    background-color: red;
 }
 .category {
     background-color: azure;
@@ -184,7 +186,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
 .heavy_body {
     background-color: lightgoldenrodyellow;
 }
-.test {
+.border {
     border-bottom: 1px solid;
 }
 .saturday {

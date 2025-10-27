@@ -26,7 +26,7 @@ const getSuggestion = (word: string) => {
 
 <template>
     
-    <div class="base">
+    <div class="base_input_form">
         <div v-on:click="openDetail" class="title">add</div> 
         <div v-show="showDetail">
             <select v-model="selectedCategory">
@@ -54,8 +54,8 @@ const getSuggestion = (word: string) => {
 </template>
 
 <style scoped>
-.base {
-    background-color: lightblue;
+.base_input_form {
+    background-color: lightyellow;
     width: 100%;
 }
 .title {

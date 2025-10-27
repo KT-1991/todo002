@@ -32,40 +32,49 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
 </script>
 
 <template>
-    <div class="base">
-        <div>test list</div>
-        <div class="category2 container">
-            <div class="container">{{ "" }}</div>
-            <div v-for="category in todoStore.listCategory" class="container">
-                <div>{{ category.name}}</div>
-            </div>            
-        </div>
-
-            <div v-for="date in todoStore.dateSpan" class="category2 container">
-                <div class="container">{{ date }}</div>
-                <div v-for="category in todoStore.listCategory" class="category2">
-                    <div v-for="item in getTodoByCategory(date, category.id)" >
-                        <div>
-                            <span>{{ item.title}}</span>
+    <div class="base_calendar_todo">
+        <table class="calendar_table">
+            <thead>
+                <tr>
+                    <th>date</th>
+                    <th v-for="category in todoStore.listCategory">{{ category.name }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="date in todoStore.dateSpan">
+                    <td>{{ date }}</td>
+                    <td v-for="category in todoStore.listCategory">
+                        <div v-for="item in getTodoByCategory(date, category.id)" >
+                            <span class="item">{{ item.title}}</span>
                             <button v-on:click="todoStore.deleteTodo(item.id)">delete</button>
                         </div>
-                    </div>
-                </div>
-            </div>                 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
 </template>
 
 <style scoped> 
-.base {
+.base_calendar_todo {
     background-color: antiquewhite;
     max-height: 100%;
     overflow-y: scroll;
 }
+.calendar_table {
+    width: 100%;
+    border-collapse: collapse;
+    * th {
+        border: 1px solid;
+    }
+    * td {
+        border: 1px solid;
+    }
+}
 .container {
     display: flex;
     width: 100%;
-    border: 1px solid;
+    
 }
 .category {
     background-color: azure;
@@ -75,6 +84,6 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
     width: 100%;
 }
 .item {
-    margin: 0 4px 0 4px;
+    margin: 10px;
 }
 </style>

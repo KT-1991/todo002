@@ -8,7 +8,7 @@ const { isLoading, error, executeQuery, exportDB, importDB } = useSQLite()
 export const useTodoStore = defineStore("todo", {
   // ストアの状態（state）
   state: () => ({
-    listCategory: {} as {id: number, name: string}[],
+    listCategory: [{}] as {id: number, name: string}[],
     currentTodo: {} as {[idCategory: number]: {id: number, 
                                               createAt: Date,
                                               doAt: Date, 
@@ -30,7 +30,6 @@ export const useTodoStore = defineStore("todo", {
       let maxDate: number;
         minDate = new Date().getTime();
         maxDate = new Date().getTime();
-      
       this.listCategory.forEach(category => {
           this.currentTodo[category.id]?.forEach(item => {
               if(minDate > item.doAt.getTime()){
@@ -80,12 +79,14 @@ export const useTodoStore = defineStore("todo", {
       calendarTodo[date.toLocaleDateString()] = {};
       this.listCategory.forEach(category => {
         calendarTodo[date.toLocaleDateString()]![category.id] = [];
-        if(this.currentTodo[category.id]!.length > 0){
-          this.currentTodo[category.id]!.forEach(item => {
-            if(item.doAt.getFullYear() == date.getFullYear() && item.doAt.getMonth() == date.getMonth() && item.doAt.getDate() == date.getDate()){
-              calendarTodo[date.toLocaleDateString()]![category.id]?.push(item);
-            }
-          });
+        if(this.currentTodo[category.id] != null){
+          if(this.currentTodo[category.id]!.length > 0){
+            this.currentTodo[category.id]!.forEach(item => {
+              if(item.doAt.getFullYear() == date.getFullYear() && item.doAt.getMonth() == date.getMonth() && item.doAt.getDate() == date.getDate()){
+                calendarTodo[date.toLocaleDateString()]![category.id]?.push(item);
+              }
+            });
+          }          
         }
       });
     }
@@ -97,7 +98,12 @@ export const useTodoStore = defineStore("todo", {
     
     async init() {
       await this.initListCategory();
-      await this.initTodo();
+      await this.initTodo(false, 0, 0);
+    },
+
+    async initWithCompletedData(limit: number, offset: number){
+      await this.initListCategory();
+      await this.initTodo(true, limit, offset);
     },
 
     async getColumnInfo(tableName: string): Promise<{[colName: string]: number}> {
@@ -129,26 +135,57 @@ export const useTodoStore = defineStore("todo", {
       }
     },
 
-    async initTodo() {
+    async initTodo(hasCompletedData: boolean, limit: number, offset: number) {
       this.listCategory.forEach(element => {
           this.currentTodo[element.id] = [];
           this.completedTodo[element.id] = [];
       });
-      const sqlSelect: string = `SELECT 
+      let whereCondition: string = "";
+      let tableCondition: string = " d_tr_todo dt ";
+      let limitCondition: string = "" ;
+      if(!hasCompletedData){
+        whereCondition = " WHERE deleted_at IS NULL ";
+      }else{
+        limitCondition = " LIMIT " + offset.toString() + " , " + limit.toString()
+        tableCondition = ` ( SELECT 
+                                * 
+                              FROM 
+                                d_tr_todo 
+                              ORDER BY 
+                                created_at DESC 
+                               ` + limitCondition + ` ) dt `;        
+      }
+      
+      let sqlSelect: string = `SELECT 
                                     tt.id as id,
                                     tt.id_category as id_category,
                                     tt.title as title,
                                     tt.detail as detail,
                                     tt.do_at as do_at,
                                     tt.created_at as created_at,
-                                    dt.created_at as deleted_at
-                                  FROM
-                                    tr_todo tt
-                                  LEFT JOIN 
-                                    d_tr_todo dt
-                                  ON tt.id = dt.id
-                                  ORDER BY
-                                    do_at ASC`
+                                    dt.created_at as deleted_at`
+                                if(hasCompletedData){
+                                  sqlSelect += " , ifnull(dt.created_at, tt.created_at) as sort_date " 
+                                }
+                      
+                                sqlSelect +=  ` 
+                                  FROM 
+                                    tr_todo tt 
+                                  LEFT JOIN `
+                                  + tableCondition +
+                                  `
+                                  ON tt.id = dt.id `
+                                  + whereCondition +
+                                  `ORDER BY`
+                                  if(hasCompletedData){
+                                    sqlSelect += " sort_date DESC "
+                                  }else{
+                                    sqlSelect += " do_at DESC "
+                                  }
+                                  sqlSelect += limitCondition;
+
+
+      console.log(sqlSelect);
       let result = await executeQuery(sqlSelect);
       if(result.result.resultRows?.length == 0){
         await executeQuery("INSERT INTO tr_todo (id_category, title, detail, do_at) VALUES (1, 'test01', 'test01-01', '2025-10-01')");
@@ -190,7 +227,7 @@ export const useTodoStore = defineStore("todo", {
 
     async addTodo(idCategory: number, title: string, detail: string, doAt: Date) {
       await executeQuery("INSERT INTO tr_todo (id_category, title, detail, do_at) VALUES ("+idCategory.toString()+", '"+title+"', '"+detail+"', '"+doAt.toString()+"')");
-      await this.initTodo()
+      await this.initTodo(false, 0, 0)
     },
     async deleteTodo(id: number){
       const sql: string = `INSERT INTO d_tr_todo
@@ -201,19 +238,39 @@ export const useTodoStore = defineStore("todo", {
       } catch (error) {
         
       }
-      await this.initTodo();
+      await this.initTodo(false, 0, 0);
+    },
+    async cancelDeleteTodo(id: number){
+      const sql: string = `DELETE FROM  
+                              d_tr_todo
+                            WHERE id = ` + id.toString() ;
+      try {
+        await executeQuery(sql);
+      } catch (error) {
+        
+      }
+    },
+    async cancelAddTodo(id: number){
+      const sql: string = `DELETE FROM  
+                              tr_todo
+                            WHERE id = ` + id.toString() ;
+      try {
+        await executeQuery(sql);
+      } catch (error) {
+        
+      }
     },
     async addCategory(name: string) {
       await executeQuery("INSERT INTO ms_category (name) VALUES ('" + name + "')")
       await this.initListCategory();
-      await this.initTodo();
+      await this.initTodo(false, 0, 0);
     },
     async deleteCategory(id: number) {
       const sql: string = `INSERT INTO d_ms_category
                               (id)
                           VALUES (` + id.toString() + `)`;
       await executeQuery(sql);
-      await this.initTodo();
+      await this.initTodo(false, 0, 0);
     },
     async makeSuggestions(word: string) {
       const sql: string = `SELECT 

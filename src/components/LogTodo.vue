@@ -1,13 +1,30 @@
 <script setup lang="ts">
 import { useTodoStore } from '@/stores/todo';
-import { reactive } from 'vue';
+import { reactive, ref, Ref } from 'vue';
 
     const todoStore = useTodoStore();
 
     const log: Array<{action: string, category_id: number, category_name: string , id: number, created_at: Date, title: string, detail: string, isCompleted: boolean}> = reactive([]);
 
+    const LIMIT_ROW: number = 100;
+    const rowOffset: Ref<number> = ref(0);
+    
+    const moveOffset = async (moveNext: boolean) => {
+        if(moveNext){
+            rowOffset.value += LIMIT_ROW;
+        }else{
+            if(rowOffset.value >= LIMIT_ROW){
+                rowOffset.value -= LIMIT_ROW;
+            }else{
+                //何もしない
+            }
+        }
+        await initLog();
+    }
+
     const initLog = async () => {
-        await todoStore.init()
+        log.splice(0, log.length);
+        await todoStore.initWithCompletedData(LIMIT_ROW ,rowOffset.value);
         todoStore.listCategory.forEach(category => {
             todoStore.currentTodo[category.id]!.forEach(item => {
                 log.push({
@@ -48,8 +65,11 @@ import { reactive } from 'vue';
     initLog();
 
     const generateTestData = async () => {
-        for(let i=0; i < 30; i++){
-           await todoStore.addTodo(1, "test" + i.toString(), "detail" + i.toString(), new Date()); 
+        for(let i=0; i < 3000; i++){
+           todoStore.addTodo(1, "test" + i.toString(), "detail" + i.toString(), new Date()); 
+        }
+        for(let i=0; i < 2970; i++){
+            todoStore.deleteTodo(i);
         }
     }
     const getActionTitle = (isCompleted: boolean, prevAction: string): string => {
@@ -63,13 +83,33 @@ import { reactive } from 'vue';
             return "delete";
         }
     }
+    const executeAction = async (isCompleted: boolean, prevAction: string, id: number) => {
+        const actionTitle: string = getActionTitle(isCompleted, prevAction);
+        switch(actionTitle){
+            case "cancel":
+                await todoStore.cancelDeleteTodo(id);
+                console.log(id);
+                await initLog();
+                break;
+            case "delete": 
+                await todoStore.cancelAddTodo(id);
+                await initLog();
+                break;
+        }
+    }
 </script>
 
 <template>
     <div>
-        <button v-on:click="todoStore.import">import</button>
-        <button v-on:click="todoStore.export">export</button>
-        <button v-on:click="generateTestData">gen test data</button>
+        <div>
+            <button v-on:click="todoStore.import">import</button>
+            <button v-on:click="todoStore.export">export</button>
+            <button v-on:click="generateTestData">gen test data</button>            
+        </div>
+        <div>
+            <button v-on:click="moveOffset(false)">prev</button>
+            <button v-on:click="moveOffset(true)">next</button>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -89,7 +129,8 @@ import { reactive } from 'vue';
                     <td>{{ item.title }}</td>
                     <td>{{ item.detail }}</td>
                     <td>
-                        <button v-if="getActionTitle(item.isCompleted, item.action)!=''">
+                        <button v-if="getActionTitle(item.isCompleted, item.action)!=''"
+                            v-on:click="executeAction(item.isCompleted, item.action, item.id)">
                             {{ getActionTitle(item.isCompleted, item.action) }}
                         </button>
                     </td>

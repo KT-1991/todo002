@@ -5,7 +5,7 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <div class="background">
-    <div class="base">
+    <div class="base_top">
       <header class="header_nav">
         <nav>
           <RouterLink to="/">Home</RouterLink>
@@ -24,13 +24,15 @@ import HelloWorld from './components/HelloWorld.vue'
 </template>
 
 <style scoped>
-.base {
-  height: 80vh;
+.base_top {
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
-.header_nav * {
-  margin: 4px;
+.header_nav {
+  * {
+    margin: 0 4px;
+  } 
 }
 .background {
   height: 100vh;
