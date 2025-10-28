@@ -348,7 +348,20 @@ export const useTodoStore = defineStore("todo", {
       } else{
         return -sign;
       }
-    }
+    },
+    getMax(): number {
+    let max = 0;
+    this.listCategory.forEach(elem => {
+        const listTodo = this.currentTodo[elem.id]
+        if(listTodo != null){
+            const len:number = listTodo.length;
+            if(max < len){
+                max = len;
+            }            
+        }
+    })
+    return max;
+}
   },
 
 });  

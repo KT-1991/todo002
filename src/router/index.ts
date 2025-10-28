@@ -5,6 +5,7 @@ import ListView from '@/views/ListView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import CategoryView from '@/views/CategoryView.vue'
 import LogView from '@/views/LogView.vue'
+import SettingView from '@/views/SettingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +48,11 @@ const router = createRouter({
       name: 'log',
       component: LogView,
     },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: SettingView,
+    }
   ],
 })
 

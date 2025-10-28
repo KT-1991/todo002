@@ -32,3 +32,51 @@ export const TABLE_INFO = {
     ],
 
 }
+export const COLOR_TYPE = {
+    primary: "primary" as string,
+    primaryHeavy: "primaryHeavy" as string,
+    secondary: "secondary",
+    secondaryHeavy: "secondaryHeavy",
+    background: "background",
+    error: "error",
+    onPrimary: "onPrimary",
+    onPrimaryHeavy: "onPrimaryHeavy",
+    onSecondary: "onSecondary",
+    onSecondaryHeavy: "onSecondaryHeavy",
+    onBackground: "onBackground",
+    onError: "onError",
+}
+
+export const COLOR_INFO: {[id: string]: {name: string, 
+                                        color: {
+                                                primary : string,
+                                               primaryHeavy: string,  
+                                               secondary: string,
+                                               secondaryHeavy: string,
+                                               background: string,
+                                               error: string,
+                                               onPrimary: string,
+                                               onPrimaryHeavy: string,
+                                               onSecondary: string,
+                                               onSecondaryHeavy: string,
+                                               onBackground: string,
+                                               onError: string               
+                                            }
+}} = {
+    "test": {name: "テスト", 
+                color: {
+                    primary : "#E1F5FE",
+                    primaryHeavy: "#B3E5FC",
+                    secondary: "#E8EAF6",
+                    secondaryHeavy: "#C5CAE9",
+                    background: "#FFFFFF",
+                    error: "#FF0000",
+                    onPrimary: "#000000",
+                    onPrimaryHeavy: "#000000",
+                    onSecondary: "#000000",
+                    onSecondaryHeavy: "#000000",
+                    onBackground: "#000000",
+                    onError: "#FFFFFF",
+                }   
+            }, 
+}

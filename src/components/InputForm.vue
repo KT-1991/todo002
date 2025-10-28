@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useColorStore } from '@/stores/color';
 import { useTodoStore } from '@/stores/todo';
 import { ref, type Ref } from 'vue';
+import { COLOR_TYPE } from '@/scripts/const';
 
-
+const colorStore = useColorStore();
 const todoStore = useTodoStore();
 const selectedCategory: Ref<string> = ref("");
 
@@ -27,8 +29,11 @@ const getSuggestion = (word: string) => {
 <template>
     
     <div class="base_input_form">
-        <div v-on:click="openDetail">add ▼</div> 
-        <div v-show="showDetail">
+        <div v-on:click="openDetail" class="inputTitle">
+            <div class="arrow" :class="{arrow_rotate:showDetail}"> ▼ </div>
+            <span>新規作成</span>
+        </div> 
+        <div v-show="showDetail" class="inputContent">
             <select v-model="selectedCategory">
                 <option disabled value="" >カテゴリー</option>
                 <option v-for="item in todoStore.listCategory" 
@@ -38,12 +43,12 @@ const getSuggestion = (word: string) => {
                 </option>
             </select>
             <br>
-            <input type="text" placeholder="title" v-model="title" v-on:keyup="todoStore.makeSuggestions(title)">
+            <input type="text" placeholder="title" v-model="title" v-on:keyup="todoStore.makeSuggestions(title)" class="textArea">
             <br>
             <div v-for="value in todoStore.suggestions">
                 <button v-on:click="getSuggestion(value)">{{ value }}</button>
             </div>
-            <input type="text" placeholder="detail" v-model="detail">
+            <textarea class="textArea" v-model="detail" placeholder="detail" ></textarea>
             <br>
             <input type="date" placeholder="date" v-model="doAt">
             <br>
@@ -55,10 +60,28 @@ const getSuggestion = (word: string) => {
 
 <style scoped>
 .base_input_form {
-    background-color: lightskyblue;
     width: 100%;
-    margin: 0 0 0 10px;
-    padding: 5px
+    margin: 10px;
+    border: 1px solid black;
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.secondary));
 }
-
+.inputTitle {
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.secondaryHeavy));
+}
+.inputContent {
+    padding: 5px;
+}
+.textArea {
+  field-sizing: content;
+  min-width: 150px;
+  min-height: min-content;
+}
+.arrow{
+    transition: 1s;
+    display: inline-block;
+    margin: 4px
+}
+.arrow_rotate{
+    transform: rotate(180deg);
+}
 </style>

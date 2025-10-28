@@ -2,6 +2,10 @@
 import { useTodoStore } from '@/stores/todo';
 import TheWelcome from '../components/TheWelcome.vue'
 import { ref, type Ref } from 'vue';
+import { useColorStore } from '@/stores/color';
+import { COLOR_TYPE } from '@/scripts/const';
+
+const colorStore = useColorStore();
 
 const todoStore = useTodoStore();
 todoStore.init();
@@ -29,6 +33,13 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
     }
 }
 
+const isHolidayClass = (date: string) => {
+    switch(new Date(date).getDay()){
+        case 0: return "sunday";
+        case 6: return "saturday";
+        default: return "";
+    }
+}
 </script>
 
 <template>
@@ -42,7 +53,7 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
             </thead>
             <tbody>
                 <tr v-for="date in todoStore.dateSpan">
-                    <td>{{ date }}</td>
+                    <td v-bind:class="isHolidayClass(date)">{{ date }}</td>
                     <td v-for="category in todoStore.listCategory">
                         <div v-for="item in getTodoByCategory(date, category.id)" >
                             <span class="item">{{ item.title}}</span>
@@ -57,19 +68,21 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
 
 <style scoped> 
 .base_calendar_todo {
-    background-color: antiquewhite;
     height: 90vh;
     margin: 0 0 0 10px;
     overflow-y: scroll;
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimaryHeavy));
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 .calendar_table {
     width: 100%;
     border-collapse: collapse;
     * th {
         border: 1px solid;
+        background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
     }
     * td {
-        border: 1px solid;
+        border: 1px solid black;
     }
 }
 .container {
@@ -86,5 +99,11 @@ const getTodoByCategory = (date: string, idCategory: number): {id: number,
 }
 .item {
     margin: 10px;
+}
+.saturday {
+    color: blue;
+}
+.sunday {
+    color: red;
 }
 </style>

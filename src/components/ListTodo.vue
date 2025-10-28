@@ -2,7 +2,10 @@
 import { useTodoStore } from '@/stores/todo';
 import TheWelcome from '../components/TheWelcome.vue'
 import { ref, type Ref } from 'vue';
+import { COLOR_TYPE } from '@/scripts/const';
+import { useColorStore } from '@/stores/color';
 
+const colorStore = useColorStore();
 const todoStore = useTodoStore();
 todoStore.init();
 
@@ -10,23 +13,9 @@ const showDetail: Ref<boolean> = ref(false);
 const openDetail = () => {
     showDetail.value = !showDetail.value;
 }
-const getMax = (): number => {
-    let max = 0;
-    todoStore.listCategory.forEach(elem => {
-        const listTodo = todoStore.currentTodo[elem.id]
-        if(listTodo != null){
-            const len:number = listTodo.length;
-            if(max < len){
-                max = len;
-            }            
-        }
-
-    })
-    return max;
-}
 const EMPTY: string = "　"
 const getContent = (index: number, categoryId: number, itemName: string) => {
-    if(index > getMax()){
+    if(index > todoStore.getMax()){
         return EMPTY;
     }
     const content = todoStore.currentTodo[categoryId]![index-1];
@@ -82,7 +71,7 @@ const isLastRowClass = (categoryId: number, row: number) => {
     }
 }
 const isHolidayClass = (index: number, categoryId: number) => {
-    if(index > getMax()){
+    if(index > todoStore.getMax()){
         return "";
     }
     const content = todoStore.currentTodo[categoryId]![index-1];
@@ -102,26 +91,39 @@ const isHolidayClass = (index: number, categoryId: number) => {
                 <thead class="border" v-bind:class="getBackgroundColorClass(category.id, true)">
                     <tr> 
                         <th colspan="3">
-                            {{ category.name }}
+                            <span>{{ category.name }}</span>
+                            <span>{{ "(" + todoStore.currentTodo[category.id]?.length + ")" }}</span>
                         </th>
                     </tr>
                     <tr >
                         <th class="header">
-                            <button v-on:click="todoStore.sortByDate(category.id)">sort: date</button>
+                            <button v-on:click="todoStore.sortByDate(category.id)">
+                                <div class="arrow" :class="{arrow_rotate:todoStore.isSortedByDateAsc}"> ▼ </div>
+                                <span>日付</span>
+                            </button>
                         </th>
                         <th>
-                            <button v-on:click="todoStore.sortByTitle(category.id)">sort: title</button>
+                            <button v-on:click="todoStore.sortByTitle(category.id)">
+                                <div class="arrow" :class="{arrow_rotate:todoStore.isSortedByTitleAsc}"> ▼ </div>
+                                <span>項目</span>
+                            </button>
                         </th>  
                         <th></th>                          
                     </tr>         
 
                 </thead>
                 <tbody>
-                    <tr v-for="i in getMax()" v-bind:class="getBackgroundColorClass(category.id, false)"
+                    <tr v-for="i in todoStore.getMax()" v-bind:class="getBackgroundColorClass(category.id, false)"
                         :class="{border: isLastRowClass(category.id, i)}">
                             <td v-bind:class="isHolidayClass(i, category.id)">{{ getContent(i, category.id, "date") }}</td>
                             <td>
-                                <div v-on:click="openDetail">{{getContent(i, category.id, "title")  }}</div>
+                                <div>
+                                    <span>{{getContent(i, category.id, "title")  }}</span>
+                                    <button v-on:click="openDetail" v-show="getContent(i, category.id, 'detail')?.trim() != ''">
+                                        <span v-show="!showDetail">…</span>
+                                        <span v-show="showDetail">▲</span>
+                                    </button>
+                                </div>
                                 <div v-show="showDetail">{{ getContent(i, category.id, "detail") }}</div>
                             </td>
                             <td>
@@ -142,16 +144,16 @@ const isHolidayClass = (index: number, categoryId: number) => {
     background-color: antiquewhite;
     overflow-y: scroll;
     height: 90vh;
-    ç
+    margin: 0 0 0 10px;
     border: 1px solid;
+    overflow: hidden;
 }
 .container {
     display: flex;
     flex-direction: row;
-    overflow-y: scroll;
+    overflow: scroll;
     min-width: 100%;
     height: 90vh;
-    background-color: red;
 }
 .category {
     background-color: azure;
@@ -177,16 +179,16 @@ const isHolidayClass = (index: number, categoryId: number) => {
     }
 }
 .light_head {
-    background-color: lightblue;
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
 }
 .heavy_head {
-    background-color: lightcyan;
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 .light_body {
-    background-color: palegoldenrod;
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 .heavy_body {
-    background-color: lightgoldenrodyellow;
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
 }
 .border {
     border-bottom: 1px solid;
@@ -196,5 +198,13 @@ const isHolidayClass = (index: number, categoryId: number) => {
 }
 .sunday {
     color: red;
+}
+.arrow{
+    transition: 1s;
+    display: inline-block;
+    margin: 4px
+}
+.arrow_rotate{
+    transform: rotate(180deg);
 }
 </style>
