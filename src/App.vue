@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { COLOR_TYPE } from './scripts/const';
+import { useColorStore } from './stores/color';
+
+const colorStore = useColorStore();
+
 </script>
 
 <template>
@@ -31,6 +36,7 @@ import HelloWorld from './components/HelloWorld.vue'
   flex-direction: column;
 }
 .header_nav {
+  background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
   * {
     margin: 0 4px;
   } 

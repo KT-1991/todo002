@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { useColorStore } from '@/stores/color';
 import { useTodoStore } from '@/stores/todo';
 import { reactive, ref, Ref } from 'vue';
+import { COLOR_TYPE } from '@/scripts/const';
 
+    const colorStore = useColorStore();
     const todoStore = useTodoStore();
 
     const log: Array<{action: string, category_id: number, category_name: string , id: number, created_at: Date, title: string, detail: string, isCompleted: boolean}> = reactive([]);
@@ -72,7 +75,7 @@ import { reactive, ref, Ref } from 'vue';
             todoStore.deleteTodo(i);
         }
     }
-    const getActionTitle = (isCompleted: boolean, prevAction: string): string => {
+    const getActionName = (isCompleted: boolean, prevAction: string): string => {
         if(isCompleted){
             if(prevAction == "complete"){
                 return "cancel";
@@ -83,8 +86,19 @@ import { reactive, ref, Ref } from 'vue';
             return "delete";
         }
     }
+    const getActionTitle = (isCompleted: boolean, prevAction: string): string => {
+        if(isCompleted){
+            if(prevAction == "complete"){
+                return "↩︎キャンセル";
+            }else{
+                return "";
+            }            
+        }else{
+            return "❌削除";
+        }
+    }
     const executeAction = async (isCompleted: boolean, prevAction: string, id: number) => {
-        const actionTitle: string = getActionTitle(isCompleted, prevAction);
+        const actionTitle: string = getActionName(isCompleted, prevAction);
         switch(actionTitle){
             case "cancel":
                 await todoStore.cancelDeleteTodo(id);
@@ -107,11 +121,12 @@ import { reactive, ref, Ref } from 'vue';
             <button v-on:click="generateTestData">gen test data</button>            
         </div>
         <div>
-            <button v-on:click="moveOffset(false)">prev</button>
-            <button v-on:click="moveOffset(true)">next</button>
+            <span>{{ rowOffset.valueOf().toString() + "-" + (rowOffset.valueOf() + LIMIT_ROW).toString() + "件目" }}</span>
+            <button v-on:click="moveOffset(false)">{{ "前の" + LIMIT_ROW.toString() + "件" }}</button>
+            <button v-on:click="moveOffset(true)">{{ "次の" + LIMIT_ROW.toString() + "件" }}</button>
         </div>
-        <table>
-            <thead>
+        <table class="logTable">
+            <thead class="log_table_title">
                 <tr>
                     <th>action</th>
                     <th>category</th>
@@ -121,11 +136,11 @@ import { reactive, ref, Ref } from 'vue';
                     <th> </th>
                 </tr>                
             </thead>
-            <tbody>
-                <tr v-for="item in log">
+            <tbody class="log_table_content"> 
+                <tr v-for="item in log" class="logRow" :class="{grayRow: getActionTitle(item.isCompleted, item.action)==''}">
                     <td>{{ item.action }}</td>
                     <td>{{ item.category_name }}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{ item.created_at.toLocaleDateString() }}</td>
                     <td>{{ item.title }}</td>
                     <td>{{ item.detail }}</td>
                     <td>
@@ -145,4 +160,20 @@ import { reactive, ref, Ref } from 'vue';
 
 <style scoped>
 
+.logTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+.logRow {
+    border: 1px solid #999;
+}
+.grayRow {
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.gray));
+}
+.log_table_title{
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
+}
+.log_table_content{
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
+}
 </style>

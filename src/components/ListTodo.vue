@@ -188,7 +188,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 .heavy_body {
-    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.background));
 }
 .border {
     border-bottom: 1px solid;

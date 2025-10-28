@@ -45,6 +45,7 @@ export const COLOR_TYPE = {
     onSecondaryHeavy: "onSecondaryHeavy",
     onBackground: "onBackground",
     onError: "onError",
+    gray: "gray"
 }
 
 export const COLOR_INFO: {[id: string]: {name: string, 
@@ -60,7 +61,8 @@ export const COLOR_INFO: {[id: string]: {name: string,
                                                onSecondary: string,
                                                onSecondaryHeavy: string,
                                                onBackground: string,
-                                               onError: string               
+                                               onError: string,
+                                               gray: string         
                                             }
 }} = {
     "test": {name: "テスト", 
@@ -77,6 +79,7 @@ export const COLOR_INFO: {[id: string]: {name: string,
                     onSecondaryHeavy: "#000000",
                     onBackground: "#000000",
                     onError: "#FFFFFF",
+                    gray: "#AAAAAA"
                 }   
             }, 
 }
