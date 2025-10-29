@@ -34,6 +34,8 @@ const addTodo = async () => {
         const result = await confirmDialog.value.openDialog(DIALOG_TYPE.ALERT, "警告", "日付が未入力なので本日の日付で登録します");
         if(result == RESPONSE_TYPE.CANCEL){
             return;
+        }else{
+            doAt.value = new Date();
         }
     }
     todoStore.addTodo(selectedCategory.value as unknown as number, title.value, detail.value, doAt.value);

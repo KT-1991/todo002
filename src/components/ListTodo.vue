@@ -109,7 +109,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
                                 <span>項目</span>
                             </ButtonMain>
                         </th>  
-                        <th></th>                          
+                        <th>完了</th>                          
                     </tr>         
 
                 </thead>
@@ -132,7 +132,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
                             </td>
                             <td>
                                 <ButtonMain :button-type="BUTTON_TYPE.SECONDARY" v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
-                                        v-if="getContent(i, category.id, 'delete') != EMPTY">完了!</ButtonMain>
+                                        v-if="getContent(i, category.id, 'delete') != EMPTY">✔️</ButtonMain>
                             </td>
 
                     </tr>

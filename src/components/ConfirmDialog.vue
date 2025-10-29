@@ -4,6 +4,11 @@ import { BUTTON_TYPE, DIALOG_TYPE, RESPONSE_TYPE } from '@/scripts/const'
 import { useColorStore } from '@/stores/color';
 import { COLOR_TYPE } from '@/scripts/const';
 import ButtonMain from './ButtonMain.vue';
+import IconBase from './IconTemplate.vue';
+import IconTemplate from './IconTemplate.vue';
+import IconAlert from './icons/IconAlert.vue';
+import IconInfo from './icons/IconInfo.vue';
+import IconError from './icons/IconError.vue';
 
 const colorStore = useColorStore();
 
@@ -20,12 +25,14 @@ const hasOK: Ref<boolean> = ref(false);
 const hasCancel: Ref<boolean> = ref(false);
 const title: Ref<string> = ref("");
 const detail: Ref<string> = ref("");
+const dialogPattern: Ref<string> = ref("");
 
 // Promiseのresolveをキャッシュ
 let resolve: (action: 'cancel' | 'close') => void
 
 // 外部に公開するAPI。ダイアログを開いて、終了
 async function openDialog(dialogType :string, inputTitle: string, inputDetail: string) {
+    dialogPattern.value = dialogType;
     switch(dialogType){
         case DIALOG_TYPE.ERROR:
             hasOK.value = true;
@@ -79,6 +86,13 @@ onUnmounted(() => {
   <dialog ref="dialog" class="modal_dialog">
     <div v-if="open">
         <div class="modal_title">{{ title }}</div>
+        <div class="modal_icon">
+            <IconTemplate>
+                <IconInfo v-if="dialogPattern==DIALOG_TYPE.INFO"/>
+                <IconAlert v-if="dialogPattern==DIALOG_TYPE.ALERT"/>
+                <IconError v-if="dialogPattern==DIALOG_TYPE.ERROR"/>
+            </IconTemplate>
+        </div>
         <div class="modal_content">{{ detail }}</div>
       <div class="modal_action">
         <ButtonMain :button-type="BUTTON_TYPE.PRIMARY" class="modal_button" v-if="hasOK" v-on:click="onDialogAction('close')">OK</ButtonMain> 
@@ -114,5 +128,9 @@ onUnmounted(() => {
 .modal_button {
     width: 100%;
     margin: 5px;
+}
+.modal_icon {
+    display: flex;
+    justify-content: center;
 }
 </style>
