@@ -2,7 +2,9 @@
 import { useColorStore } from '@/stores/color';
 import { useTodoStore } from '@/stores/todo';
 import { ref, type Ref } from 'vue';
-import { COLOR_TYPE } from '@/scripts/const';
+import { BUTTON_TYPE, COLOR_TYPE, DIALOG_TYPE, RESPONSE_TYPE } from '@/scripts/const';
+import ConfirmDialog from './ConfirmDialog.vue';
+import ButtonMain from './ButtonMain.vue';
 
 const colorStore = useColorStore();
 const todoStore = useTodoStore();
@@ -15,8 +17,25 @@ const openDetail = () => {
 
 const title: Ref<string> = ref("");
 const detail: Ref<string> = ref("");
-const doAt: Ref<Date> = ref(new Date());
-const addTodo = () => {
+const doAt = ref();
+
+const confirmDialog = ref();
+
+const addTodo = async () => {
+    if(selectedCategory.value == ""){
+        const result = await confirmDialog.value.openDialog(DIALOG_TYPE.ERROR, "エラー", "カテゴリーを入力してください");
+        return;
+    }
+    if(title.value == ""){
+        const result = await confirmDialog.value.openDialog(DIALOG_TYPE.ERROR, "エラー", "タイトルを入力してください");
+        return;
+    }
+    if(doAt.value == null){
+        const result = await confirmDialog.value.openDialog(DIALOG_TYPE.ALERT, "警告", "日付が未入力なので本日の日付で登録します");
+        if(result == RESPONSE_TYPE.CANCEL){
+            return;
+        }
+    }
     todoStore.addTodo(selectedCategory.value as unknown as number, title.value, detail.value, doAt.value);
 }
 
@@ -45,17 +64,25 @@ const getSuggestion = (word: string) => {
             <br>
             <input type="text" placeholder="title" v-model="title" v-on:keyup="todoStore.makeSuggestions(title)" class="textArea">
             <br>
-            <div v-for="value in todoStore.suggestions">
-                <button v-on:click="getSuggestion(value)">{{ value }}</button>
+            <div>履歴</div>
+            <div class="suggestion_container">
+                <span v-for="value in todoStore.suggestions">
+                    <ButtonMain :button-type="BUTTON_TYPE.TERTIARY"
+                                class="suggestion_button" 
+                                v-on:click="getSuggestion(value)">
+                        <span class="suggestion" >{{ value }}</span>
+                    </ButtonMain>
+                </span>                
             </div>
             <textarea class="textArea" v-model="detail" placeholder="detail" ></textarea>
             <br>
-            <input type="date" placeholder="date" v-model="doAt">
+            <input class="input_do_at" type="date" placeholder="date" value="0" v-model="doAt">
             <br>
-            <button v-on:click="addTodo">add</button>             
+            <ButtonMain :button-type="BUTTON_TYPE.PRIMARY" 
+                        v-on:click="addTodo()">追加</ButtonMain>             
         </div>            
     </div>
-
+    <ConfirmDialog ref="confirmDialog"></ConfirmDialog>
 </template>
 
 <style scoped>
@@ -83,5 +110,23 @@ const getSuggestion = (word: string) => {
 }
 .arrow_rotate{
     transform: rotate(180deg);
+}
+.suggestion {
+    width: fit-content;
+    margin: 4px;
+}
+.suggestion_button{
+    margin: 3px;
+}
+.suggestion_container{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid v-bind(colorStore.getColorBy(COLOR_TYPE.secondaryHeavy));;
+}
+.input_do_at{
+    margin-bottom: 15px;
 }
 </style>

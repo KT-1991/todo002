@@ -2,8 +2,9 @@
 import { useTodoStore } from '@/stores/todo';
 import TheWelcome from '../components/TheWelcome.vue'
 import { ref, type Ref } from 'vue';
-import { COLOR_TYPE } from '@/scripts/const';
+import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import { useColorStore } from '@/stores/color';
+import ButtonMain from './ButtonMain.vue';
 
 const colorStore = useColorStore();
 const todoStore = useTodoStore();
@@ -97,16 +98,16 @@ const isHolidayClass = (index: number, categoryId: number) => {
                     </tr>
                     <tr >
                         <th class="header">
-                            <button v-on:click="todoStore.sortByDate(category.id)">
+                            <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" v-on:click="todoStore.sortByDate(category.id)">
                                 <div class="arrow" :class="{arrow_rotate:todoStore.isSortedByDateAsc}"> ▼ </div>
                                 <span>日付</span>
-                            </button>
+                            </ButtonMain>
                         </th>
                         <th>
-                            <button v-on:click="todoStore.sortByTitle(category.id)">
+                            <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" v-on:click="todoStore.sortByTitle(category.id)">
                                 <div class="arrow" :class="{arrow_rotate:todoStore.isSortedByTitleAsc}"> ▼ </div>
                                 <span>項目</span>
-                            </button>
+                            </ButtonMain>
                         </th>  
                         <th></th>                          
                     </tr>         
@@ -117,18 +118,21 @@ const isHolidayClass = (index: number, categoryId: number) => {
                         :class="{border: isLastRowClass(category.id, i)}">
                             <td v-bind:class="isHolidayClass(i, category.id)">{{ getContent(i, category.id, "date") }}</td>
                             <td>
-                                <div>
+                                <div class="list_title_container">
                                     <span>{{getContent(i, category.id, "title")  }}</span>
-                                    <button v-on:click="openDetail" v-show="getContent(i, category.id, 'detail')?.trim() != ''">
+                                    <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" 
+                                            class="show_detail_button"
+                                            v-on:click="openDetail" 
+                                            v-show="getContent(i, category.id, 'detail')?.trim() != ''">
                                         <span v-show="!showDetail">…</span>
                                         <span v-show="showDetail">▲</span>
-                                    </button>
+                                    </ButtonMain>
                                 </div>
                                 <div v-show="showDetail">{{ getContent(i, category.id, "detail") }}</div>
                             </td>
                             <td>
-                                <button v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
-                                        v-if="getContent(i, category.id, 'delete') != EMPTY">complete !</button>
+                                <ButtonMain :button-type="BUTTON_TYPE.SECONDARY" v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
+                                        v-if="getContent(i, category.id, 'delete') != EMPTY">完了!</ButtonMain>
                             </td>
 
                     </tr>
@@ -141,7 +145,6 @@ const isHolidayClass = (index: number, categoryId: number) => {
 
 <style scoped> 
 .base_list_todo {
-    background-color: antiquewhite;
     overflow-y: scroll;
     height: 90vh;
     margin: 0 0 0 10px;
@@ -156,7 +159,6 @@ const isHolidayClass = (index: number, categoryId: number) => {
     height: 90vh;
 }
 .category {
-    background-color: azure;
     width: calc(100% / v-bind(todoStore.listCategory.length));
 }
 .header{
@@ -206,5 +208,11 @@ const isHolidayClass = (index: number, categoryId: number) => {
 }
 .arrow_rotate{
     transform: rotate(180deg);
+}
+.list_title_container{
+    display: flex;
+}
+.show_detail_button{
+    width: fit-content;
 }
 </style>

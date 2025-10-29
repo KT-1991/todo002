@@ -153,7 +153,7 @@ export const useTodoStore = defineStore("todo", {
                                 d_tr_todo 
                               ORDER BY 
                                 created_at DESC 
-                               ` + limitCondition + ` ) dt `;        
+                              LIMIT ` + (offset + limit).toString() + ` ) dt `;        
       }
       
       let sqlSelect: string = `SELECT 

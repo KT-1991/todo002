@@ -43,6 +43,5 @@ const colorStore = useColorStore();
 }
 .background {
   height: 100vh;
-  background-color: whitesmoke;
 }
 </style>

@@ -1,5 +1,20 @@
 
+export const DIALOG_TYPE = {
+    ERROR: "error",
+    ALERT: "alert",
+    INFO: "info",
+}
 
+export const RESPONSE_TYPE = {
+    OK: "ok",
+    CANCEL: "cancel",
+}
+
+export const BUTTON_TYPE = {
+    PRIMARY: "primary",
+    SECONDARY: "secondary",
+    TERTIARY: "tertiary",
+}
 
 export const SQL_TEXT = {
     TABLE_INFO_CATEGORY: "PRAGMA table_info(ms_category);",
@@ -69,8 +84,8 @@ export const COLOR_INFO: {[id: string]: {name: string,
                 color: {
                     primary : "#E1F5FE",
                     primaryHeavy: "#B3E5FC",
-                    secondary: "#E8EAF6",
-                    secondaryHeavy: "#C5CAE9",
+                    secondary: "#E0F7FA",
+                    secondaryHeavy: "#B2EBF2",
                     background: "#FFFFFF",
                     error: "#FF0000",
                     onPrimary: "#000000",

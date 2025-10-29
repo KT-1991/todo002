@@ -91,7 +91,6 @@ const isHolidayClass = (date: string) => {
     
 }
 .category {
-    background-color: azure;
     width: calc(100% / v-bind(todoStore.listCategory.length));
 }
 .category2 {
