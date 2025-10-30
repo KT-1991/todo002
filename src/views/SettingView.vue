@@ -1,8 +1,8 @@
+<script setup lang="ts">
+import EditSetting from '@/components/EditSetting.vue';
+</script>
 <template>
-  <div>
-    <div>color</div>
-    <div>language</div>
-  </div>
+  <EditSetting/>
 </template>
 
 <style scoped>

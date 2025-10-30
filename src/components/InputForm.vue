@@ -55,7 +55,7 @@ const getSuggestion = (word: string) => {
             <span>新規作成</span>
         </div> 
         <div v-show="showDetail" class="inputContent">
-            <select v-model="selectedCategory">
+            <select v-model="selectedCategory" class="input_item">
                 <option disabled value="" >カテゴリー</option>
                 <option v-for="item in todoStore.listCategory" 
                     v-bind:value="item.id" 
@@ -64,10 +64,14 @@ const getSuggestion = (word: string) => {
                 </option>
             </select>
             <br>
-            <input type="text" placeholder="title" v-model="title" v-on:keyup="todoStore.makeSuggestions(title)" class="textArea">
+            <input type="text" 
+                    placeholder="title" 
+                    v-model="title" 
+                    v-on:keyup="todoStore.makeSuggestions(title)" 
+                    class="textArea input_item">
             <br>
             <div>履歴</div>
-            <div class="suggestion_container">
+            <div class="suggestion_container input_item">
                 <span v-for="value in todoStore.suggestions">
                     <ButtonMain :button-type="BUTTON_TYPE.TERTIARY"
                                 class="suggestion_button" 
@@ -76,9 +80,9 @@ const getSuggestion = (word: string) => {
                     </ButtonMain>
                 </span>                
             </div>
-            <textarea class="textArea" v-model="detail" placeholder="detail" ></textarea>
+            <textarea class="textArea input_item" v-model="detail" placeholder="detail" ></textarea>
             <br>
-            <input class="input_do_at" type="date" placeholder="date" value="0" v-model="doAt">
+            <input class="input_do_at input_item" type="date" placeholder="date" value="0" v-model="doAt">
             <br>
             <ButtonMain :button-type="BUTTON_TYPE.PRIMARY" 
                         v-on:click="addTodo()">追加</ButtonMain>             
@@ -93,12 +97,19 @@ const getSuggestion = (word: string) => {
     margin: 10px;
     border: 1px solid black;
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.secondary));
+    * {
+        color: v-bind(colorStore.getColorBy(COLOR_TYPE.onSecondaryHeavy));
+    }
 }
 .inputTitle {
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.secondaryHeavy));
 }
 .inputContent {
     padding: 5px;
+}
+.input_item {
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onSecondaryHeavy));
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.secondaryHeavy));
 }
 .textArea {
   field-sizing: content;

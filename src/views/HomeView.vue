@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import TodoHome from '@/components/TodoHome.vue';
 import TheWelcome from '../components/TheWelcome.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <TodoHome />
   </main>
 </template>
 

@@ -5,6 +5,7 @@ import { ref, type Ref } from 'vue';
 import { useColorStore } from '@/stores/color';
 import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import ButtonMain from './ButtonMain.vue';
+import { getWorkingDay } from '@/scripts/utils';
 
 const colorStore = useColorStore();
 
@@ -41,6 +42,11 @@ const isHolidayClass = (date: string) => {
         default: return "";
     }
 }
+
+const showDate = (dateText: string):string => {
+    const date = new Date(dateText);
+    return (date.getMonth() + 1 ) + "/" + date.getDate() + " (" + getWorkingDay(date) + ")";
+}
 </script>
 
 <template>
@@ -54,7 +60,7 @@ const isHolidayClass = (date: string) => {
             </thead>
             <tbody>
                 <tr v-for="date in todoStore.dateSpan">
-                    <td v-bind:class="isHolidayClass(date)">{{ date }}</td>
+                    <td v-bind:class="isHolidayClass(date)">{{ showDate(date) }}</td>
                     <td v-for="category in todoStore.listCategory">
                         <div v-for="item in getTodoByCategory(date, category.id)" class="calendar_table_item">
                             <span class="item">{{ item.title}}</span>
@@ -74,7 +80,7 @@ const isHolidayClass = (date: string) => {
     height: 90vh;
     margin: 0 0 0 10px;
     overflow-y: scroll;
-    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimaryHeavy));
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimary));
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 .calendar_table {
@@ -82,10 +88,11 @@ const isHolidayClass = (date: string) => {
     border-collapse: collapse;
     * th {
         border: 1px solid;
+        color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimaryHeavy));
         background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
     }
     * td {
-        border: 1px solid black;
+        border: 1px solid v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimaryHeavy));
     }
 }
 .calendar_table_item{

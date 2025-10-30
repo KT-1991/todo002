@@ -5,6 +5,7 @@ import { ref, type Ref } from 'vue';
 import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import { useColorStore } from '@/stores/color';
 import ButtonMain from './ButtonMain.vue';
+import { getWorkingDay } from '@/scripts/utils';
 
 const colorStore = useColorStore();
 const todoStore = useTodoStore();
@@ -29,7 +30,7 @@ const getContent = (index: number, categoryId: number, itemName: string) => {
             if(doAt == null){
                 return EMPTY;
             } else{
-                return (doAt.getMonth() + 1) + "/" + doAt.getDate();
+                return (doAt.getMonth() + 1) + "/" + doAt.getDate() + " (" + getWorkingDay(doAt) + ")";
             }
         case "title":
             return content!.title;
@@ -97,7 +98,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
                         </th>
                     </tr>
                     <tr >
-                        <th class="header">
+                        <th>
                             <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" v-on:click="todoStore.sortByDate(category.id)">
                                 <div class="arrow" :class="{arrow_rotate:todoStore.isSortedByDateAsc}"> ▼ </div>
                                 <span>日付</span>
@@ -181,15 +182,19 @@ const isHolidayClass = (index: number, categoryId: number) => {
     }
 }
 .light_head {
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimaryHeavy));
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
 }
 .heavy_head {
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimary));
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 .light_body {
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimary));
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 .heavy_body {
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onBackground));
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.background));
 }
 .border {

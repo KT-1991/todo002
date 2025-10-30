@@ -1,19 +1,26 @@
 <script setup lang="ts">
 import { useTodoStore } from '@/stores/todo';
 import { ref, type Ref } from 'vue';
-import { COLOR_TYPE } from '@/scripts/const';
+import { COLOR_TYPE, DIALOG_TYPE, RESPONSE_TYPE } from '@/scripts/const';
 import { useColorStore } from '@/stores/color';
+import ConfirmDialog from './ConfirmDialog.vue';
 
 const colorStore = useColorStore();
 const todoStore = useTodoStore();
 todoStore.init();
+
+const confirmDialog = ref();
 
 const newName: Ref<string> = ref("");
 
 const addCategory = () => {
     todoStore.addCategory(newName.value);
 }
-const deleteCategory = (id: number) => {
+const deleteCategory = async (id: number) => {
+    const result = await confirmDialog.value.openDialog(DIALOG_TYPE.ALERT, "警告", "削除すると復元できません。関連するすべてのTODOも削除されます。よろしいですか？");
+    if(result == RESPONSE_TYPE.CANCEL){
+        return;
+    }
     todoStore.deleteCategory(id);
     todoStore.initListCategory();
 }
@@ -43,7 +50,7 @@ const deleteCategory = (id: number) => {
             </table>            
         </div>
     </div>
-
+    <ConfirmDialog ref="confirmDialog"></ConfirmDialog>
 </template>
 
 <style scoped>

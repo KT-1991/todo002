@@ -1,3 +1,6 @@
+export const LOCAL_STORAGE = {
+    COLOR: "todo_color",
+}
 
 export const DIALOG_TYPE = {
     ERROR: "error",
@@ -63,7 +66,8 @@ export const COLOR_TYPE = {
     gray: "gray"
 }
 
-export const COLOR_INFO: {[id: string]: {name: string, 
+export const COLOR_INFO: {[id: string]: {id: string,
+                                        name: string, 
                                         color: {
                                                 primary : string,
                                                primaryHeavy: string,  
@@ -80,7 +84,8 @@ export const COLOR_INFO: {[id: string]: {name: string,
                                                gray: string         
                                             }
 }} = {
-    "test": {name: "テスト", 
+    "test": {id: "test",
+                name: "テスト", 
                 color: {
                     primary : "#E1F5FE",
                     primaryHeavy: "#B3E5FC",
@@ -93,6 +98,42 @@ export const COLOR_INFO: {[id: string]: {name: string,
                     onSecondary: "#000000",
                     onSecondaryHeavy: "#000000",
                     onBackground: "#000000",
+                    onError: "#FFFFFF",
+                    gray: "#AAAAAA"
+                }   
+            }, 
+    "light": {id: "light",
+                name: "ライト", 
+                color: {
+                    primary : "#ECEFF1",
+                    primaryHeavy: "#B0BEC5",
+                    secondary: "#EFEBE9",
+                    secondaryHeavy: "#D7CCC8",
+                    background: "#FFFFFF",
+                    error: "#FF0000",
+                    onPrimary: "#000000",
+                    onPrimaryHeavy: "#000000",
+                    onSecondary: "#000000",
+                    onSecondaryHeavy: "#000000",
+                    onBackground: "#000000",
+                    onError: "#FFFFFF",
+                    gray: "#AAAAAA"
+                }   
+            }, 
+    "dark": {id: "dark",
+                name: "ダーク", 
+                color: {
+                    primary : "#263238",
+                    primaryHeavy: "#37474F",
+                    secondary: "#212121",
+                    secondaryHeavy: "#424242",
+                    background: "#000000",
+                    error: "#FF0000",
+                    onPrimary: "#FFFFFF",
+                    onPrimaryHeavy: "#FFFFFF",
+                    onSecondary: "#FFFFFF",
+                    onSecondaryHeavy: "#FFFFFF",
+                    onBackground: "#FFFFFF",
                     onError: "#FFFFFF",
                     gray: "#AAAAAA"
                 }   

@@ -3,7 +3,7 @@ import LogTodo from '@/components/LogTodo.vue';
 </script>
 
 <template>
-  <main class="base">
+  <main>
     <LogTodo/>
   </main>
 </template>

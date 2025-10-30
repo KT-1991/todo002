@@ -2,7 +2,8 @@
 import { useColorStore } from '@/stores/color';
 import { useTodoStore } from '@/stores/todo';
 import { reactive, ref, Ref } from 'vue';
-import { COLOR_TYPE } from '@/scripts/const';
+import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
+import ButtonMain from './ButtonMain.vue';
 
     const colorStore = useColorStore();
     const todoStore = useTodoStore();
@@ -114,7 +115,7 @@ import { COLOR_TYPE } from '@/scripts/const';
 </script>
 
 <template>
-    <div>
+    <div class="base_log">
         <div>
             <button v-on:click="todoStore.import">import</button>
             <button v-on:click="todoStore.export">export</button>
@@ -144,10 +145,11 @@ import { COLOR_TYPE } from '@/scripts/const';
                     <td>{{ item.title }}</td>
                     <td>{{ item.detail }}</td>
                     <td>
-                        <button v-if="getActionTitle(item.isCompleted, item.action)!=''"
+                        <ButtonMain v-if="getActionTitle(item.isCompleted, item.action)!=''"
+                            :button-type="BUTTON_TYPE.SECONDARY"
                             v-on:click="executeAction(item.isCompleted, item.action, item.id)">
                             {{ getActionTitle(item.isCompleted, item.action) }}
-                        </button>
+                        </ButtonMain>
                     </td>
                 </tr>                  
             </tbody>
@@ -159,10 +161,16 @@ import { COLOR_TYPE } from '@/scripts/const';
 </template> 
 
 <style scoped>
-
+.base_log {
+    width: 100%;
+    padding: 10px;
+    height: 100%;
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.background));
+}
 .logTable {
     border-collapse: collapse;
     width: 100%;
+    background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.background));
 }
 .logRow {
     border: 1px solid #999;
@@ -171,9 +179,12 @@ import { COLOR_TYPE } from '@/scripts/const';
     color: v-bind(colorStore.getColorBy(COLOR_TYPE.gray));
 }
 .log_table_title{
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimaryHeavy));
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primaryHeavy));
+    border: 1px solid #999;
 }
 .log_table_content{
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimary));
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
 }
 </style>
