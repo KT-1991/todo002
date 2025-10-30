@@ -3,7 +3,8 @@ import { useTodoStore } from '@/stores/todo';
 import TheWelcome from '../components/TheWelcome.vue'
 import { ref, type Ref } from 'vue';
 import { useColorStore } from '@/stores/color';
-import { COLOR_TYPE } from '@/scripts/const';
+import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
+import ButtonMain from './ButtonMain.vue';
 
 const colorStore = useColorStore();
 
@@ -55,9 +56,11 @@ const isHolidayClass = (date: string) => {
                 <tr v-for="date in todoStore.dateSpan">
                     <td v-bind:class="isHolidayClass(date)">{{ date }}</td>
                     <td v-for="category in todoStore.listCategory">
-                        <div v-for="item in getTodoByCategory(date, category.id)" >
+                        <div v-for="item in getTodoByCategory(date, category.id)" class="calendar_table_item">
                             <span class="item">{{ item.title}}</span>
-                            <button v-on:click="todoStore.deleteTodo(item.id)">complete !</button>
+                            <ButtonMain :button-type="BUTTON_TYPE.SECONDARY" 
+                                        v-on:click="todoStore.deleteTodo(item.id)"
+                                        class="calendar_complete_button">✔️</ButtonMain>
                         </div>
                     </td>
                 </tr>
@@ -85,6 +88,11 @@ const isHolidayClass = (date: string) => {
         border: 1px solid black;
     }
 }
+.calendar_table_item{
+    display: flex;
+    align-items: center; 
+    vertical-align: middle;
+}
 .container {
     display: flex;
     width: 100%;
@@ -97,12 +105,15 @@ const isHolidayClass = (date: string) => {
     width: 100%;
 }
 .item {
-    margin: 10px;
+    margin: 0 10px 0 10px;
 }
 .saturday {
     color: blue;
 }
 .sunday {
     color: red;
+}
+.calendar_complete_button{
+    width: fit-content;
 }
 </style>
