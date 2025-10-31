@@ -18,6 +18,10 @@ export const BUTTON_TYPE = {
     SECONDARY: "secondary",
     TERTIARY: "tertiary",
 }
+export const BUTTON_SIZE = {
+    SHORT: "short",
+    LONG: "long",
+}
 
 export const SQL_TEXT = {
     TABLE_INFO_CATEGORY: "PRAGMA table_info(ms_category);",

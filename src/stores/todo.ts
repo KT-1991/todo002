@@ -99,6 +99,11 @@ export const useTodoStore = defineStore("todo", {
     async init() {
       await this.initListCategory();
       await this.initTodo(false, 0, 0);
+
+      this.listCategory.forEach(category => {
+        this.isSortedByDateAsc = false;
+        this.sortByDate(category.id);
+      });
     },
 
     async initWithCompletedData(limit: number, offset: number){

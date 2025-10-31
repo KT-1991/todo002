@@ -2,7 +2,7 @@
 import { useColorStore } from '@/stores/color';
 import { useTodoStore } from '@/stores/todo';
 import { reactive, ref, Ref } from 'vue';
-import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
+import { BUTTON_SIZE, BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import ButtonMain from './ButtonMain.vue';
 
     const colorStore = useColorStore();
@@ -116,15 +116,34 @@ import ButtonMain from './ButtonMain.vue';
 
 <template>
     <div class="base_log">
-        <div>
-            <button v-on:click="todoStore.import">import</button>
-            <button v-on:click="todoStore.export">export</button>
-            <button v-on:click="generateTestData">gen test data</button>            
+        <div class="button_container">
+            <ButtonMain v-on:click="todoStore.import"
+                :button-size="BUTTON_SIZE.SHORT"
+                :button-type="BUTTON_TYPE.PRIMARY">
+                <span class="button_text">インポート</span>
+            </ButtonMain>
+            <ButtonMain v-on:click="todoStore.export"
+                :button-size="BUTTON_SIZE.SHORT"
+                :button-type="BUTTON_TYPE.PRIMARY">
+                <span class="button_text">エクスポート</span>
+            </ButtonMain>
+            <!--button v-on:click="generateTestData">gen test data</button-->            
         </div>
-        <div>
-            <span>{{ rowOffset.valueOf().toString() + "-" + (rowOffset.valueOf() + LIMIT_ROW).toString() + "件目" }}</span>
-            <button v-on:click="moveOffset(false)">{{ "前の" + LIMIT_ROW.toString() + "件" }}</button>
-            <button v-on:click="moveOffset(true)">{{ "次の" + LIMIT_ROW.toString() + "件" }}</button>
+        <div class="button_container">
+            <span class="button_text">{{ rowOffset.valueOf().toString() + "-" + (rowOffset.valueOf() + LIMIT_ROW).toString() + "件目" }}</span>
+            <ButtonMain v-on:click="moveOffset(false)"
+                :button-size="BUTTON_SIZE.SHORT"
+                :button-type="BUTTON_TYPE.PRIMARY">
+                    <span class="button_text">
+                        {{ "前の" + LIMIT_ROW.toString() + "件" }}
+                    </span>
+            </ButtonMain>
+            <ButtonMain v-on:click="moveOffset(true)"
+                :button-size="BUTTON_SIZE.SHORT"
+                :button-type="BUTTON_TYPE.PRIMARY">
+                    <span class="button_text">{{ "次の" + LIMIT_ROW.toString() + "件" }}</span>
+                    
+            </ButtonMain>
         </div>
         <table class="logTable">
             <thead class="log_table_title">
@@ -166,6 +185,15 @@ import ButtonMain from './ButtonMain.vue';
     padding: 10px;
     height: 100%;
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.background));
+}
+.button_container {
+    display: flex;
+    * {
+        margin: 5px;
+    }
+}
+.button_text {
+    color: v-bind(colorStore.getColorBy(COLOR_TYPE.onBackground));
 }
 .logTable {
     border-collapse: collapse;

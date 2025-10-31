@@ -42,7 +42,7 @@ colorStore.$subscribe((mutation, state) => {
                         <select v-model="selectedColor" 
                             v-on:change="changeColor" 
                             class="setting_color">
-                            <option disabled value="" >カテゴリー</option>
+                            <option disabled value="" >テーマカラー</option>
                             <option v-for="item in COLOR_INFO" 
                                         v-bind:value="item.id">
                                 {{ item.name }}

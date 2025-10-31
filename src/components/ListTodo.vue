@@ -2,7 +2,7 @@
 import { useTodoStore } from '@/stores/todo';
 import TheWelcome from '../components/TheWelcome.vue'
 import { ref, type Ref } from 'vue';
-import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
+import { BUTTON_SIZE, BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import { useColorStore } from '@/stores/color';
 import ButtonMain from './ButtonMain.vue';
 import { getWorkingDay } from '@/scripts/utils';
@@ -99,13 +99,17 @@ const isHolidayClass = (index: number, categoryId: number) => {
                     </tr>
                     <tr >
                         <th>
-                            <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" v-on:click="todoStore.sortByDate(category.id)">
+                            <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" 
+                                        :button-size="BUTTON_SIZE.LONG"
+                                        v-on:click="todoStore.sortByDate(category.id)">
                                 <div class="arrow" :class="{arrow_rotate:todoStore.isSortedByDateAsc}"> ▼ </div>
                                 <span>日付</span>
                             </ButtonMain>
                         </th>
                         <th>
-                            <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" v-on:click="todoStore.sortByTitle(category.id)">
+                            <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" 
+                                        :button-size="BUTTON_SIZE.LONG"
+                                        v-on:click="todoStore.sortByTitle(category.id)">
                                 <div class="arrow" :class="{arrow_rotate:todoStore.isSortedByTitleAsc}"> ▼ </div>
                                 <span>項目</span>
                             </ButtonMain>
@@ -122,6 +126,7 @@ const isHolidayClass = (index: number, categoryId: number) => {
                                 <div class="list_title_container">
                                     <span>{{getContent(i, category.id, "title")  }}</span>
                                     <ButtonMain :button-type="BUTTON_TYPE.TERTIARY" 
+                                            :button-size="BUTTON_SIZE.LONG"
                                             class="show_detail_button"
                                             v-on:click="openDetail" 
                                             v-show="getContent(i, category.id, 'detail')?.trim() != ''">
@@ -132,7 +137,9 @@ const isHolidayClass = (index: number, categoryId: number) => {
                                 <div v-show="showDetail">{{ getContent(i, category.id, "detail") }}</div>
                             </td>
                             <td>
-                                <ButtonMain :button-type="BUTTON_TYPE.SECONDARY" v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
+                                <ButtonMain :button-type="BUTTON_TYPE.SECONDARY" 
+                                        :button-size="BUTTON_SIZE.LONG"
+                                        v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
                                         v-if="getContent(i, category.id, 'delete') != EMPTY">✔️</ButtonMain>
                             </td>
 

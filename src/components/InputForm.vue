@@ -85,7 +85,10 @@ const getSuggestion = (word: string) => {
             <input class="input_do_at input_item" type="date" placeholder="date" value="0" v-model="doAt">
             <br>
             <ButtonMain :button-type="BUTTON_TYPE.PRIMARY" 
-                        v-on:click="addTodo()">追加</ButtonMain>             
+                        class="add_button"
+                        v-on:click="addTodo()">
+                <span class="add_button_text">追加</span>
+            </ButtonMain>             
         </div>            
     </div>
     <ConfirmDialog ref="confirmDialog"></ConfirmDialog>
@@ -141,5 +144,11 @@ const getSuggestion = (word: string) => {
 }
 .input_do_at{
     margin-bottom: 15px;
+}
+.add_button{
+    width: fit-content;
+}
+.add_button_text{
+    margin: 10px;
 }
 </style>

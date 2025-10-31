@@ -117,6 +117,7 @@ onUnmounted(() => {
 }
 .modal_content{
     padding: 10px;
+    white-space: pre-wrap;
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.secondary));
 }
 .modal_action {

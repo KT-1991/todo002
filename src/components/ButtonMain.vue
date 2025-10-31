@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
+import { BUTTON_SIZE, BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import { useColorStore } from '@/stores/color';
 
 const colorStore = useColorStore();
 
 const props = defineProps({
   buttonType: String,
+  buttonSize: String,
 })
 const emit = defineEmits(['click']);
 
@@ -23,12 +24,30 @@ const getClassButtonType = () => {
             return "button_base_type_tertiary";
     }
 }
+const getClassButtonSize = (name: string) => {
+    switch(name){
+        case "base":
+            switch(props.buttonSize){
+                case BUTTON_SIZE.LONG:
+                    return "button_base_size_long";
+                case BUTTON_SIZE.SHORT:
+                    return "button_base_size_short";
+            }
+        case "content":
+            switch(props.buttonSize){
+                case BUTTON_SIZE.LONG:
+                    return "button_content_size_long";
+                case BUTTON_SIZE.SHORT:
+                    return "button_content_size_short";
+            }
+    }
 
+}   
 </script>
 
 <template>
-    <span class="button_base" v-bind:class="getClassButtonType()" v-on:click="onClick">
-        <span class="button_content">
+    <span class="button_base" v-bind:class="getClassButtonType(), getClassButtonSize('base')" v-on:click="onClick">
+        <span class="button_content" v-bind:class="getClassButtonSize('content')">
             <slot></slot>
         </span>
     </span>
@@ -38,12 +57,17 @@ const getClassButtonType = () => {
 .button_base {
     display: flex;
     justify-content: center;
-    width: 100%;
     cursor: pointer;
     border-radius: 5px;
     :hover{
         border-radius: 5px;
     }
+}
+.button_base_size_long {
+    width: 100%;
+}
+.button_base_size_short {
+    width: fit-content;
 }
 .button_base_type_primary {
     background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.secondaryHeavy));
@@ -67,5 +91,11 @@ const getClassButtonType = () => {
 .button_content {
     flex: 1;
     text-align: center;
+}
+.button_content_size_short{
+    padding: 5px 10px;
+}
+.button_content_size_long{
+
 }
 </style>
