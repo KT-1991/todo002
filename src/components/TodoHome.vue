@@ -54,7 +54,7 @@ const getToday = (): string => {
     width: 95%;
     margin: 10px 0 ;
     border: 1px solid rgb(120, 120, 120);
-    box-shadow: 10px 5px 5px rgb(120, 120, 120);
+    box-shadow: 5px 3px 3px rgb(120, 120, 120);
 }
 .home_category_title{
     font-size: large;

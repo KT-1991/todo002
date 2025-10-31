@@ -14,14 +14,14 @@ colorStore.init();
     <div class="base_top">
       <header class="header_nav">
         <nav>
-          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/">ホーム</RouterLink>
           <!--RouterLink to="/about">About</RouterLink>
           <RouterLink to="/test">Test</RouterLink-->
-          <RouterLink to="/list">List</RouterLink>
-          <RouterLink to="/calendar">Calendar</RouterLink>
-          <RouterLink to="/category">Category</RouterLink>
-          <RouterLink to="/log">Log</RouterLink>
-          <RouterLink to="/setting">Setting</RouterLink>
+          <RouterLink to="/list">リスト</RouterLink>
+          <RouterLink to="/calendar">カレンダー</RouterLink>
+          <RouterLink to="/category">カテゴリー編集</RouterLink>
+          <RouterLink to="/log">ログ</RouterLink>
+          <RouterLink to="/setting">設定</RouterLink>
         </nav>
       </header>
       <RouterView/>    
