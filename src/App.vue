@@ -40,6 +40,7 @@ colorStore.init();
   background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.primary));
   * {
     margin: 0 4px;
+    font-family: 'NotoSans';
     color: v-bind(colorStore.getColorBy(COLOR_TYPE.onPrimary));
   } 
 }
@@ -47,4 +48,5 @@ colorStore.init();
   height: 100vh;
   background-color: v-bind(colorStore.getColorBy(COLOR_TYPE.background));
 }
+
 </style>
