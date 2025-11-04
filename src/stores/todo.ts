@@ -101,7 +101,8 @@ export const useTodoStore = defineStore("todo", {
       await this.initTodo(false, 0, 0);
 
       this.listCategory.forEach(category => {
-        this.isSortedByDateAsc = false;
+        //this.isSortedByDateAsc = false;
+        this.isSortedByDateAsc = !this.isSortedByDateAsc;
         this.sortByDate(category.id);
       });
     },
@@ -243,7 +244,8 @@ export const useTodoStore = defineStore("todo", {
       } catch (error) {
         
       }
-      await this.initTodo(false, 0, 0);
+      //await this.initTodo(false, 0, 0);
+      await this.init();
     },
     async cancelDeleteTodo(id: number){
       const sql: string = `DELETE FROM  

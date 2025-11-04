@@ -14,6 +14,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: { title: 'todo - ホーム' }
     },
     {
       path: '/about',
@@ -32,26 +33,31 @@ const router = createRouter({
       path: '/list',
       name: 'list',
       component: ListView,
+      meta: { title: 'todo - リスト' }
     },
     {
       path: '/calendar',
       name: 'calendar',
       component: CalendarView,
+      meta: { title: 'todo - カレンダー' }
     },
     {
       path: '/category',
       name: 'category',
       component: CategoryView,
+      meta: { title: 'todo - カテゴリー編集' }
     },
     {
       path: '/log',
       name: 'log',
       component: LogView,
+      meta: { title: 'todo - ログ' }
     },
     {
       path: '/setting',
       name: 'setting',
       component: SettingView,
+      meta: { title: 'todo - 設定' }
     }
   ],
 })

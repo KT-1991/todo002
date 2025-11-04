@@ -5,6 +5,10 @@
   src: url('@/assets/fonts/NotoSansJP-VariableFont_wght.ttf') format('truetype');
 }
 
+body {
+  font-family: 'NotoSans';
+}
+
 /*
 #app {
   max-width: 1280px;

@@ -6,6 +6,7 @@ import { useColorStore } from '@/stores/color';
 import { BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import ButtonMain from './ButtonMain.vue';
 import { getWorkingDay } from '@/scripts/utils';
+import EffectComplete from './EffectComplete.vue';
 
 const colorStore = useColorStore();
 
@@ -47,6 +48,11 @@ const showDate = (dateText: string):string => {
     const date = new Date(dateText);
     return (date.getMonth() + 1 ) + "/" + date.getDate() + " (" + getWorkingDay(date) + ")";
 }
+const effectComplete: Ref<typeof EffectComplete | null> = ref(null);
+const complete = (id: number, text: string) => {
+    todoStore.deleteTodo(id)
+    effectComplete.value!.add(text + " 完了!", 1000);
+}
 </script>
 
 <template>
@@ -65,7 +71,7 @@ const showDate = (dateText: string):string => {
                         <div v-for="item in getTodoByCategory(date, category.id)" class="calendar_table_item">
                             <span class="item">{{ item.title}}</span>
                             <ButtonMain :button-type="BUTTON_TYPE.SECONDARY" 
-                                        v-on:click="todoStore.deleteTodo(item.id)"
+                                        v-on:click="complete(item.id, item.title)"
                                         class="calendar_complete_button">✔️</ButtonMain>
                         </div>
                     </td>
@@ -73,6 +79,7 @@ const showDate = (dateText: string):string => {
             </tbody>
         </table>
     </div>
+    <EffectComplete ref="effectComplete"/>
 </template>
 
 <style scoped> 

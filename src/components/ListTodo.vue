@@ -6,6 +6,7 @@ import { BUTTON_SIZE, BUTTON_TYPE, COLOR_TYPE } from '@/scripts/const';
 import { useColorStore } from '@/stores/color';
 import ButtonMain from './ButtonMain.vue';
 import { getWorkingDay } from '@/scripts/utils';
+import EffectComplete from './EffectComplete.vue';
 
 const colorStore = useColorStore();
 const todoStore = useTodoStore();
@@ -83,7 +84,11 @@ const isHolidayClass = (index: number, categoryId: number) => {
         default: return "";
     }
 }
-
+const effectComplete: Ref<typeof EffectComplete | null> = ref(null);
+const complete = (id: number, text: string) => {
+    todoStore.deleteTodo(id)
+    effectComplete.value!.add(text + " 完了!", 1000);
+}
 </script>
 
 <template>
@@ -139,16 +144,15 @@ const isHolidayClass = (index: number, categoryId: number) => {
                             <td>
                                 <ButtonMain :button-type="BUTTON_TYPE.SECONDARY" 
                                         :button-size="BUTTON_SIZE.LONG"
-                                        v-on:click="todoStore.deleteTodo((getContent(i, category.id, 'delete') as any))"
+                                        v-on:click="complete((getContent(i, category.id, 'delete') as any), getContent(i, category.id, 'title') as string)"
                                         v-if="getContent(i, category.id, 'delete') != EMPTY">✔️</ButtonMain>
                             </td>
-
                     </tr>
                 </tbody>
             </table>                 
         </div>
     </div>
-
+    <EffectComplete ref="effectComplete"/>
 </template>
 
 <style scoped> 
@@ -226,5 +230,15 @@ const isHolidayClass = (index: number, categoryId: number) => {
 }
 .show_detail_button{
     width: fit-content;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

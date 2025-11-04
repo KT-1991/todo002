@@ -60,7 +60,7 @@ const getClassButtonSize = (name: string) => {
     cursor: pointer;
     border-radius: 5px;
     :hover{
-        border-radius: 5px;
+        border-radius: 3px;
     }
 }
 .button_base_size_long {

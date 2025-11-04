@@ -7,7 +7,7 @@ const colorStore = useColorStore();
 const selectedColor: Ref<string> = ref("test");
 
 const changeColor = (e: Event) => {
-    colorStore.changeColorFormat(e.target?.value);
+    colorStore.changeColorFormat((e.target as any).value);
 }
 const initColor = () => {
     const color = localStorage.getItem(LOCAL_STORAGE.COLOR);
